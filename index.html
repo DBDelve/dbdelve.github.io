@@ -1542,13 +1542,12 @@
                             <span>free &amp; open source</span
                             ><span>no telemetry, nothing behind a paywall</span>
                         </p>
-                        <h1>Dive deep into your&nbsp;<em>data.</em></h1>
+                        <h1>One DB client to replace them&nbsp;<em>all.</em></h1>
                         <p class="lede">
-                            DB Client that gets out of the way of you and your
+                            Gets out of the way of you and your
                             data.
                             <strong
-                                >no Electron, no JVM, no Tauri, GPU
-                                Accelerated</strong
+                                >GPU Accelerated, no Electron, no JVM, no Tauri</strong
                             >, fast, memory efficient and snappy on datasets
                             where others crash
                         </p>
@@ -1598,6 +1597,7 @@
                         </p>
                         <div class="term quick">
                             <div class="cm"># macOS, with Homebrew</div>
+                            <!-- prettier-ignore -->
                             <div class="cmd">
                                 <code>brew install --cask ShayanAbbas1/dbdelve/dbdelve</code
                                 ><button class="copy" type="button">
@@ -1607,6 +1607,7 @@
                                 </button>
                             </div>
                             <div class="cm"># Arch Linux, from the AUR</div>
+                            <!-- prettier-ignore -->
                             <div class="cmd">
                                 <code>yay -S dbdelve-bin</code
                                 ><button class="copy" type="button">
@@ -1616,7 +1617,8 @@
                                 </button>
                             </div>
                             <div class="cm">
-                                # More ways and the one-time macOS step are under
+                                # More ways and the one-time macOS step are
+                                under
                                 <a href="#install">Install</a>.
                             </div>
                         </div>
@@ -1874,8 +1876,8 @@
                             <h3>The same table in DBeaver.</h3>
                             <p>
                                 DBeaver 25.3.1, same database, same
-                                <code class="mono">events</code> table. It
-                                reads the rows, then sits on "Set data" with the
+                                <code class="mono">events</code> table. It reads
+                                the rows, then sits on "Set data" with the
                                 spinning wait cursor for about twenty seconds.
                                 The grid never fills before we switch back to
                                 another tab.
@@ -1907,10 +1909,9 @@
                             <p>
                                 Flicking between six tabs, one of them the
                                 million-row
-                                <code class="mono">SELECT</code>. Each tab
-                                keeps its last result, so its rows are
-                                there the moment you land on it. Nothing
-                                reruns.
+                                <code class="mono">SELECT</code>. Each tab keeps
+                                its last result, so its rows are there the
+                                moment you land on it. Nothing reruns.
                             </p>
                         </div>
                     </article>
@@ -1929,6 +1930,7 @@
                     </div>
                     <div class="panel">
                         <div class="editor" aria-hidden="true">
+                            <!-- prettier-ignore -->
                             <div class="ln">
                                 <span>1</span
                                 ><code><span class="k">SELECT</span> feature, detail <span class="k">FROM</span> dbdelve.features;</code
@@ -2146,9 +2148,10 @@
                                     </tbody>
                                 </table>
                                 <div class="editor" aria-hidden="true">
+                                    <!-- prettier-ignore -->
                                     <div class="ln">
                                         <span>1</span
-                                        ><code><span class="k">UPDATE</span> <span class="t">"public"</span>.<span class="t">"events"</span> <span class="k">SET</span> <span class="t">"kind"</span> = <span class="s">'refund'</span> <span class="k">WHERE</span> <span class="t">"id"</span> = <span class="s">'3'</span></code
+                                        ><code><span class="k">UPDATE</span> <span class="t">"public"</span >.<span class="t">"events"</span> <span class="k">SET</span> <span class="t">"kind"</span> = <span class="s">'refund'</span> <span class="k">WHERE</span> <span class="t">"id"</span> = <span class="s">'3'</span></code
                                         >
                                     </div>
                                 </div>
@@ -2227,6 +2230,7 @@
                                     # Homebrew is the recommended way. It
                                     installs and upgrades.
                                 </div>
+                                <!-- prettier-ignore -->
                                 <div class="cmd">
                                     <code>brew install --cask ShayanAbbas1/dbdelve/dbdelve</code
                                     ><button class="copy" type="button">
@@ -2241,6 +2245,7 @@
                                     Clear the quarantine flag once per install
                                     (an update is a new install):
                                 </div>
+                                <!-- prettier-ignore -->
                                 <div class="cmd">
                                     <code>xattr -dr com.apple.quarantine /Applications/DBDelve.app</code
                                     ><button class="copy" type="button">
@@ -2276,6 +2281,7 @@
                                         >@0PandaDEV</a
                                     >. Thanks!
                                 </div>
+                                <!-- prettier-ignore -->
                                 <div class="cmd">
                                     <code>yay -S dbdelve-bin</code
                                     ><button class="copy" type="button">
@@ -2288,6 +2294,7 @@
                                     # Or the tarball from the latest release.
                                     Installs under ~/.local, no root.
                                 </div>
+                                <!-- prettier-ignore -->
                                 <div class="cmd">
                                     <code>tar xzf dbdelve-*-linux-*.tar.gz &amp;&amp; cd dbdelve-*-linux-*/ &amp;&amp; ./install.sh</code
                                     ><button class="copy" type="button">
@@ -2300,6 +2307,7 @@
                                     # Or the AppImage, one file that runs where
                                     it lands.
                                 </div>
+                                <!-- prettier-ignore -->
                                 <div class="cmd">
                                     <code>chmod +x dbdelve-*.AppImage &amp;&amp; ./dbdelve-*.AppImage</code
                                     ><button class="copy" type="button">
