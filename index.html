@@ -1047,18 +1047,6 @@
             .edit-shot .ln > span:first-child {
                 padding-right: 12px;
             }
-            .titlebar-shot {
-                display: grid;
-                place-items: center;
-                padding: 32px 20px;
-                background:
-                    radial-gradient(
-                        120% 140% at 30% 0%,
-                        rgb(140 50 46 / 0.35),
-                        transparent 60%
-                    ),
-                    #0b0d10;
-            }
             .card video {
                 width: 100%;
                 height: auto;
@@ -1091,13 +1079,6 @@
             .note {
                 font: 400 12.5px var(--mono);
                 color: var(--faint) !important;
-            }
-            .titlebar-shot img {
-                max-width: 412px;
-                border-radius: var(--r-control);
-                box-shadow:
-                    0 0 0 1px var(--hair-strong),
-                    0 12px 30px -10px rgb(0 0 0 / 0.7);
             }
 
             .compare {
@@ -1878,6 +1859,37 @@
                                 playsinline
                                 controls
                                 preload="none"
+                                poster="assets/tabs-poster.webp"
+                                width="1440"
+                                height="906"
+                                aria-label="DBDelve switching between a New Query tab holding a million-row result and table tabs for orders, accounts, measurements and locations, each showing its rows straight away"
+                            >
+                                <source
+                                    src="assets/tabs.mp4"
+                                    type="video/mp4"
+                                />
+                            </video>
+                        </div>
+                        <div class="body">
+                            <h3>Pick up where you left off.</h3>
+                            <p>
+                                Flicking between six tabs, one of them the
+                                million-row
+                                <code class="mono">SELECT</code>. Each tab
+                                keeps its last result, so its rows are
+                                there the moment you land on it. Nothing
+                                reruns.
+                            </p>
+                        </div>
+                    </article>
+                    <article class="panel card vs">
+                        <div class="shot">
+                            <video
+                                muted
+                                loop
+                                playsinline
+                                controls
+                                preload="none"
                                 poster="assets/dbeaver-poster.webp"
                                 width="1280"
                                 height="702"
@@ -2096,57 +2108,6 @@
 
                     <div class="closer">
                         <article class="panel card vs">
-                            <div class="shot">
-                                <video
-                                    muted
-                                    loop
-                                    playsinline
-                                    controls
-                                    preload="none"
-                                    poster="assets/tabs-poster.webp"
-                                    width="1440"
-                                    height="906"
-                                    aria-label="DBDelve switching between a New Query tab holding a million-row result and table tabs for orders, accounts, measurements and locations, each showing its rows straight away"
-                                >
-                                    <source
-                                        src="assets/tabs.mp4"
-                                        type="video/mp4"
-                                    />
-                                </video>
-                            </div>
-                            <div class="body">
-                                <h3>Pick up where you left off.</h3>
-                                <p>
-                                    Flicking between six tabs, one of them the
-                                    million-row
-                                    <code class="mono">SELECT</code>. Each tab
-                                    keeps its last result, so its rows are
-                                    there the moment you land on it. Nothing
-                                    reruns.
-                                </p>
-                            </div>
-                        </article>
-                        <article class="panel card">
-                            <div class="shot titlebar-shot">
-                                <img
-                                    src="assets/titlebar.webp"
-                                    width="824"
-                                    height="104"
-                                    alt="The DBDelve title bar tinted red, showing the DBDelve project and the dbdelve_dev connection, with access set to Full."
-                                    loading="lazy"
-                                />
-                            </div>
-                            <div class="body">
-                                <h3>Every connection wears its own color.</h3>
-                                <p>
-                                    Tint prod red and you will notice. Next to
-                                    it sit the project and connection you're
-                                    in, and the access mode: read-only,
-                                    read-write or full access.
-                                </p>
-                            </div>
-                        </article>
-                        <article class="panel card">
                             <div
                                 class="shot edit-shot"
                                 role="img"
