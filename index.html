@@ -906,6 +906,21 @@
                 font-size: 0.9em;
                 color: var(--kw);
             }
+            .grid td.val {
+                font: 400 14px var(--mono);
+                white-space: nowrap;
+            }
+            .grid td.win {
+                color: var(--mint);
+            }
+            .bench-note {
+                margin: 16px 0 0;
+                max-width: 760px;
+                line-height: 1.6;
+            }
+            .bench-note a {
+                color: var(--muted);
+            }
             .grid-foot {
                 display: flex;
                 justify-content: space-between;
@@ -938,6 +953,10 @@
                 }
                 .grid td.feat {
                     margin-bottom: 4px;
+                }
+                .grid td[data-label]::before {
+                    content: attr(data-label) " ";
+                    color: var(--faint);
                 }
                 .grid-foot span:last-child {
                     display: none;
@@ -1916,6 +1935,99 @@
                             </p>
                         </div>
                     </article>
+                </div>
+            </section>
+
+            <section class="sec" id="benchmarks" aria-labelledby="bench-h">
+                <div class="wrap">
+                    <div class="sec-head">
+                        <p class="group">
+                            <svg aria-hidden="true"><use href="#i-chev" /></svg
+                            >Benchmarks <span class="depth">−200 m</span>
+                        </p>
+                        <h2 id="bench-h">In numbers.</h2>
+                        <p>
+                            DBDelve 0.3.6 against DBeaver 25.3.1 on the same
+                            Postgres table. Median of 5 runs each, on an M1 Pro
+                            with 32 GB.
+                        </p>
+                    </div>
+                    <div class="panel">
+                        <div class="editor" aria-hidden="true">
+                            <!-- prettier-ignore -->
+                            <div class="ln">
+                                <span>1</span
+                                ><code><span class="k">SELECT</span> metric, dbdelve, dbeaver <span class="k">FROM</span> benchmarks;</code
+                                >
+                            </div>
+                        </div>
+                        <table class="grid">
+                            <caption class="sr">
+                                DBDelve and DBeaver benchmark results
+                            </caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col" aria-hidden="true">#</th>
+                                    <th scope="col">
+                                        metric <small>TEXT</small>
+                                    </th>
+                                    <th scope="col">
+                                        dbdelve <small>TEXT</small>
+                                    </th>
+                                    <th scope="col">
+                                        dbeaver <small>TEXT</small>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="idx">1</td>
+                                    <td class="feat">Launch</td>
+                                    <td class="val win" data-label="DBDelve">1.1 s</td>
+                                    <td class="val" data-label="DBeaver">5.2 s</td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">2</td>
+                                    <td class="feat">Idle memory</td>
+                                    <td class="val win" data-label="DBDelve">133 MB</td>
+                                    <td class="val" data-label="DBeaver">606 MB</td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">3</td>
+                                    <td class="feat">1,000-row query</td>
+                                    <td class="val win" data-label="DBDelve">0.21 s</td>
+                                    <td class="val" data-label="DBeaver">1.96 s</td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">4</td>
+                                    <td class="feat">1M rows, time</td>
+                                    <td class="val win" data-label="DBDelve">56 s</td>
+                                    <td class="val" data-label="DBeaver">208 s</td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">5</td>
+                                    <td class="feat">1M rows, memory*</td>
+                                    <td class="val win" data-label="DBDelve">4.9 GB</td>
+                                    <td class="val" data-label="DBeaver">17 GB</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="grid-foot" aria-hidden="true">
+                            <span>3 columns · 5 rows</span
+                            ><span>median of 5 runs · 2026-10-11</span>
+                        </div>
+                    </div>
+                    <p class="note bench-note">
+                        * Not a normal use case: the whole 1M-row table pulled
+                        into memory on purpose, with the row limit off, and that
+                        result is itself 4 GB of data. DBeaver needed its heap
+                        raised to 16 GB to finish it at all. How these were
+                        measured, and the full results, are in
+                        <a
+                            href="https://github.com/ShayanAbbas1/dbdelve/blob/main/BENCHMARKS.md"
+                            >BENCHMARKS.md</a
+                        >.
+                    </p>
                 </div>
             </section>
 
