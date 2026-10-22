@@ -1818,6 +1818,11 @@
                             <li class="row">
                                 <svg aria-hidden="true">
                                     <use href="#i-db" /></svg
+                                ><span class="name">Turso</span>
+                            </li>
+                            <li class="row">
+                                <svg aria-hidden="true">
+                                    <use href="#i-db" /></svg
                                 ><span class="name">Snowflake</span>
                             </li>
                             <li class="row">
@@ -1829,6 +1834,14 @@
                                 <svg aria-hidden="true">
                                     <use href="#i-db" /></svg
                                 ><span class="name">MongoDB</span>
+                            </li>
+                            <li class="row">
+                                <svg aria-hidden="true">
+                                    <use href="#i-db" /></svg
+                                ><span class="name">Redis</span
+                                ><span class="meta"
+                                    >Valkey, KeyDB, Dragonfly</span
+                                >
                             </li>
                             <li class="more">more engines planned</li>
                         </ul>
@@ -2073,9 +2086,10 @@
                                         A theme library with DBDelve's own Dark,
                                         Light and Black alongside Catppuccin,
                                         Tokyo Night, Gruvbox and Dracula, most
-                                        also in translucent glass. Customize
-                                        themes, keymaps, sort behavior and a lot
-                                        more!
+                                        also in translucent glass. Bring a theme
+                                        over from Zed or VS Code, or write your
+                                        own, and customize keymaps, sort
+                                        behavior and a lot more.
                                     </td>
                                 </tr>
                                 <tr>
@@ -2085,18 +2099,12 @@
                                         Import every saved connection, passwords
                                         and SSH settings included, from DBeaver
                                         on macOS, Linux and Windows, or from
-                                        TablePlus on macOS.
+                                        TablePlus on macOS. Then sort them into
+                                        projects.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="idx">3</td>
-                                    <td class="feat">Keep connections tidy</td>
-                                    <td>
-                                        Organize your connections into projects.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="idx">4</td>
                                     <td class="feat">
                                         Never mistake prod for staging
                                     </td>
@@ -2110,7 +2118,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="idx">5</td>
+                                    <td class="idx">4</td>
                                     <td class="feat">
                                         Pick up where you left off
                                     </td>
@@ -2118,30 +2126,88 @@
                                         DBDelve maintains snapshots of your data
                                         and starts right from where you left
                                         off, instead of rerunning queries.
+                                        Hidden and pinned columns and query
+                                        plans come back too.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">5</td>
+                                    <td class="feat">Edits you can read first</td>
+                                    <td>
+                                        Change a cell in place and DBDelve
+                                        writes the <code>UPDATE</code> into the
+                                        editor for you to check before it runs.
+                                        Query results from one table, key
+                                        included, take edits and new rows as
+                                        well.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="idx">6</td>
                                     <td class="feat">
-                                        Edits you can read first
+                                        Keep the columns you need
                                     </td>
                                     <td>
-                                        Change a cell in place and DBDelve
-                                        writes the <code>UPDATE</code> into the
-                                        editor for you to check before it runs.
+                                        Hide the rest, or pin a column to the left
+                                        edge so it stays put while you scroll. The
+                                        layout is still there after a restart.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="idx">7</td>
-                                    <td class="feat">Keyboard-first</td>
+                                    <td class="feat">Read a row in full</td>
                                     <td>
-                                        A command palette for everything, fuzzy
-                                        search across your schema, and every
-                                        shortcut rebindable.
+                                        Open the row panel to see every value in
+                                        a row at full length, with JSON
+                                        highlighted. Switch it to Edit to change
+                                        a long value there instead of in a cell.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="idx">8</td>
+                                    <td class="feat">Import rows from a file</td>
+                                    <td>
+                                        Load a CSV, TSV or JSON file into a
+                                        table or collection. Every row is
+                                        checked, and every statement shown,
+                                        before anything runs.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">9</td>
+                                    <td class="feat">See the query plan</td>
+                                    <td>
+                                        Run Explain, or type an
+                                        <code>EXPLAIN</code> yourself, and the
+                                        plan opens highlighted in a pane of its
+                                        own, with wasteful filters and bad row
+                                        estimates called out.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">10</td>
+                                    <td class="feat">Open the structure</td>
+                                    <td>
+                                        Open a table's columns, indexes,
+                                        constraints and foreign keys, both ways,
+                                        as a grid in a tab of its own. Switch
+                                        database from the title bar, and on
+                                        Postgres and Snowflake the schema too.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">11</td>
+                                    <td class="feat">Keyboard-first</td>
+                                    <td>
+                                        One palette for commands, tables, saved
+                                        queries, history and your connections,
+                                        with fuzzy search throughout and every
+                                        shortcut rebindable. Settings are
+                                        searchable too, docked beside your work.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="idx">12</td>
                                     <td class="feat">
                                         Your SSH, not a reimplementation
                                     </td>
@@ -2154,7 +2220,7 @@
                             </tbody>
                         </table>
                         <div class="grid-foot" aria-hidden="true">
-                            <span>2 columns · 8 rows</span
+                            <span>2 columns · 12 rows</span
                             ><span
                                 >Copy Results &nbsp; Export CSV &nbsp; Export
                                 JSON</span
@@ -2367,6 +2433,19 @@
                                         ><span class="lbl">Copy</span>
                                     </button>
                                 </div>
+                                <div class="cm">
+                                    # Updating is Homebrew too. Clear the flag
+                                    again after.
+                                </div>
+                                <!-- prettier-ignore -->
+                                <div class="cmd">
+                                    <code>brew upgrade --cask dbdelve</code
+                                    ><button class="copy" type="button">
+                                        <svg aria-hidden="true">
+                                            <use href="#i-copy" /></svg
+                                        ><span class="lbl">Copy</span>
+                                    </button>
+                                </div>
                             </div>
                             <p class="pane-foot">
                                 Or take the
@@ -2418,7 +2497,7 @@
                                 </div>
                                 <div class="cm">
                                     # Or the AppImage, one file that runs where
-                                    it lands.
+                                    it lands. It needs FUSE 2.
                                 </div>
                                 <!-- prettier-ignore -->
                                 <div class="cmd">
@@ -2431,7 +2510,10 @@
                                 </div>
                             </div>
                             <p class="pane-foot">
-                                x86_64 and aarch64, built on Ubuntu 22.04.
+                                x86_64 and aarch64, built on Ubuntu 22.04. You
+                                need a Vulkan or OpenGL driver, and a Secret
+                                Service keyring (gnome-keyring or KWallet) for
+                                saved passwords.
                                 <a
                                     data-asset="linux"
                                     href="https://github.com/ShayanAbbas1/dbdelve/releases/latest"
@@ -2535,11 +2617,13 @@
                             />DBDelve</a
                         >
                         <p>
-                            Free and open source,
+                            Free and open source, licensed under the
                             <a
                                 href="https://github.com/ShayanAbbas1/dbdelve/blob/main/LICENSE"
-                                >MIT licensed</a
-                            >. No telemetry.
+                                >GPL-3.0</a
+                            >. No telemetry. The only request DBDelve makes on
+                            its own is an update check at startup, which you
+                            can turn off in Settings.
                         </p>
                     </div>
                     <nav aria-label="Footer">
