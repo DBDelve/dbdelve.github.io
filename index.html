@@ -994,6 +994,7 @@
             }
             .card .shot img {
                 width: 100%;
+                height: auto;
             }
             .edit-shot {
                 display: flex;
@@ -1750,10 +1751,10 @@
                         <div class="beam" aria-hidden="true"></div>
                         <div class="window">
                             <img
-                                src="assets/app-hero.webp"
-                                width="1800"
-                                height="1130"
-                                alt="DBDelve in a blue glass theme: a schema tree on the left, a SELECT on the events table in the editor, and a result grid of 1,000,001 rows below it."
+                                src="assets/app-dark.webp"
+                                width="1774"
+                                height="1161"
+                                alt="DBDelve in Gruvbox Dark Glass: a schema tree on the left, a SELECT on the events table in the editor, and its first 1,000 rows in the result grid below it."
                                 fetchpriority="high"
                             />
                         </div>
@@ -1875,16 +1876,16 @@
                             controls
                             preload="none"
                             poster="assets/scroll-poster.webp"
-                            width="1600"
-                            height="794"
-                            aria-label="DBDelve scrolling through a one-million-row result in the events table"
+                            width="1728"
+                            height="1088"
+                            aria-label="DBDelve scrolling fast through a 1,002,000-row result from the events table, loaded with no row limit, then switching to the measurements table"
                         >
                             <source src="assets/scroll.mp4" type="video/mp4" />
                         </video>
                     </div>
                     <div class="status" aria-hidden="true">
                         <span class="ok">dbdelve_dev · 127.0.0.1:55432</span
-                        ><span><b>1,000,000 rows</b> · 40.4 MB · 1.3s</span>
+                        ><span><b>1,002,000 rows</b> · 4.0 GB · 55.6s</span>
                     </div>
                     <article class="panel card vs">
                         <div class="shot">
@@ -1926,26 +1927,26 @@
                                 playsinline
                                 controls
                                 preload="none"
-                                poster="assets/tabs-poster.webp"
-                                width="1440"
-                                height="906"
-                                aria-label="DBDelve switching between a New Query tab holding a million-row result and table tabs for orders, accounts, measurements and locations, each showing its rows straight away"
+                                poster="assets/launch-poster.webp"
+                                width="1728"
+                                height="1088"
+                                aria-label="DBDelve opened from the Dock and coming straight back to the New Query tab, its tabs restored and the last result of SELECT * from events already in the grid"
                             >
                                 <source
-                                    src="assets/tabs.mp4"
+                                    src="assets/launch.mp4"
                                     type="video/mp4"
                                 />
                             </video>
                         </div>
                         <div class="body">
-                            <h3>Instant tab switches.</h3>
+                            <h3>Back where you left off.</h3>
                             <p>
-                                Flicking between six tabs, one of them the
-                                million-row
-                                <code class="mono">SELECT</code>. Each tab keeps
-                                its last result, so its rows are there the
-                                moment you land on it. Nothing reruns.
+                                A cold start from the Dock. DBDelve opens on
+                                the tab you were in, with its last result
+                                already in the grid. The rows come from a
+                                snapshot, so nothing reruns.
                             </p>
+                            <p class="note">Median launch 1.1 s, DBeaver 5.2 s.</p>
                         </div>
                     </article>
                 </div>
@@ -2250,17 +2251,17 @@
                     <div class="compare" id="compare">
                         <img
                             src="assets/app-dark.webp"
-                            width="1800"
-                            height="1108"
-                            alt="DBDelve in Gruvbox Dark Glass"
+                            width="1774"
+                            height="1161"
+                            alt="DBDelve in Gruvbox Dark Glass, with SELECT * from events in the editor and its rows in the grid"
                             loading="lazy"
                         />
                         <div class="top">
                             <img
                                 src="assets/app-light.webp"
-                                width="1800"
-                                height="1108"
-                                alt="The same window in Gruvbox Light Glass"
+                                width="1774"
+                                height="1161"
+                                alt="The same window in Gruvbox Light Glass, with events joined to accounts in the editor and the joined rows in the grid"
                                 loading="lazy"
                             />
                         </div>
@@ -2341,6 +2342,42 @@
                                     Change a cell and the
                                     <code class="mono">UPDATE</code> lands in
                                     the editor. Read it, then run it.
+                                </p>
+                            </div>
+                        </article>
+                        <article class="panel card">
+                            <div class="shot">
+                                <img
+                                    src="assets/plan.webp"
+                                    width="1160"
+                                    height="580"
+                                    alt="The Plan pane for an Explain Analyze of events joined to accounts: a Hash Join over two sequential scans, with timings, row counts and two ×76 misestimates in red"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <div class="body">
+                                <h3>See the query plan.</h3>
+                                <p>
+                                    Run Explain and the plan opens in a pane of
+                                    its own, with bad row estimates called out.
+                                </p>
+                            </div>
+                        </article>
+                        <article class="panel card">
+                            <div class="shot">
+                                <img
+                                    src="assets/import.webp"
+                                    width="1160"
+                                    height="580"
+                                    alt="Importing events.csv into public.events: each file column mapped to a table column, id set to Skip, and a preview of the rows to be inserted"
+                                    loading="lazy"
+                                />
+                            </div>
+                            <div class="body">
+                                <h3>Import rows from a file.</h3>
+                                <p>
+                                    Map the columns of a CSV, TSV or JSON file
+                                    and check every row before anything runs.
                                 </p>
                             </div>
                         </article>
