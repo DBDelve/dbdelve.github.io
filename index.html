@@ -1810,8 +1810,7 @@
                                 </button>
                             </div>
                             <div class="cm">
-                                # More ways, and the macOS step after each install, are
-                                under
+                                # More ways are under
                                 <a href="#install">Install</a>.
                             </div>
                         </div>
@@ -2632,8 +2631,8 @@
                             <p class="pane-title">macOS</p>
                             <div class="term">
                                 <div class="cm">
-                                    # Homebrew is the recommended way. It
-                                    installs and upgrades.
+                                    # Homebrew is the recommended way. The cask
+                                    clears the quarantine flag for you.
                                 </div>
                                 <!-- prettier-ignore -->
                                 <div class="cmd">
@@ -2645,10 +2644,28 @@
                                     </button>
                                 </div>
                                 <div class="cm">
-                                    # It's signed ad-hoc, not notarized, so
-                                    Gatekeeper refuses the first launch.<br />#
-                                    Clear the quarantine flag once per install
-                                    (an update is a new install):
+                                    # Without Homebrew, one line installs it
+                                    into /Applications.
+                                </div>
+                                <!-- prettier-ignore -->
+                                <div class="cmd">
+                                    <code>curl -fsSL https://raw.githubusercontent.com/ShayanAbbas1/dbdelve/main/install.sh | sh</code
+                                    ><button class="copy" type="button">
+                                        <svg aria-hidden="true">
+                                            <use href="#i-copy" /></svg
+                                        ><span class="lbl">Copy</span>
+                                    </button>
+                                </div>
+                                <div class="cm">
+                                    # Or drag the
+                                    <a
+                                        data-asset="mac"
+                                        href="https://github.com/ShayanAbbas1/dbdelve/releases/latest"
+                                        >.dmg</a
+                                    >
+                                    to Applications. It's signed ad-hoc, not
+                                    notarized,<br /># so clear the quarantine
+                                    flag once before the first launch:
                                 </div>
                                 <!-- prettier-ignore -->
                                 <div class="cmd">
@@ -2659,29 +2676,11 @@
                                         ><span class="lbl">Copy</span>
                                     </button>
                                 </div>
-                                <div class="cm">
-                                    # Updating is Homebrew too. Clear the flag
-                                    again after.
-                                </div>
-                                <!-- prettier-ignore -->
-                                <div class="cmd">
-                                    <code>brew upgrade --cask dbdelve</code
-                                    ><button class="copy" type="button">
-                                        <svg aria-hidden="true">
-                                            <use href="#i-copy" /></svg
-                                        ><span class="lbl">Copy</span>
-                                    </button>
-                                </div>
                             </div>
                             <p class="pane-foot">
-                                Or take the
-                                <a
-                                    data-asset="mac"
-                                    href="https://github.com/ShayanAbbas1/dbdelve/releases/latest"
-                                    >.dmg</a
-                                >
-                                and drag DBDelve to Applications. Apple Silicon,
-                                macOS 12 or later.
+                                After that it updates itself: Update and restart,
+                                in the titlebar. Apple Silicon, macOS 12 or
+                                later.
                             </p>
                         </div>
 
@@ -2694,7 +2693,20 @@
                             <p class="pane-title">Linux</p>
                             <div class="term">
                                 <div class="cm">
-                                    # From the AUR, packaged by
+                                    # One line installs it under ~/.local, no
+                                    root.
+                                </div>
+                                <!-- prettier-ignore -->
+                                <div class="cmd">
+                                    <code>curl -fsSL https://raw.githubusercontent.com/ShayanAbbas1/dbdelve/main/install.sh | sh</code
+                                    ><button class="copy" type="button">
+                                        <svg aria-hidden="true">
+                                            <use href="#i-copy" /></svg
+                                        ><span class="lbl">Copy</span>
+                                    </button>
+                                </div>
+                                <div class="cm">
+                                    # Or from the AUR, packaged by
                                     <a href="https://github.com/0PandaDEV"
                                         >@0PandaDEV</a
                                     >. Thanks!
@@ -2739,7 +2751,9 @@
                                 x86_64 and aarch64, built on Ubuntu 22.04. You
                                 need a Vulkan or OpenGL driver, and a Secret
                                 Service keyring (gnome-keyring or KWallet) for
-                                saved passwords.
+                                saved passwords. The one-liner, tarball and
+                                AppImage installs update themselves; the AUR
+                                package updates through your package manager.
                                 <a
                                     data-asset="linux"
                                     href="https://github.com/ShayanAbbas1/dbdelve/releases/latest"
@@ -2753,7 +2767,7 @@
                                 >
                                 ·
                                 <a
-                                    href="https://github.com/ShayanAbbas1/dbdelve#linux"
+                                    href="https://github.com/ShayanAbbas1/dbdelve/blob/main/docs/install.md#linux"
                                     >full notes</a
                                 >
                             </p>
