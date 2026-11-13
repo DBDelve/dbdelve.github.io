@@ -778,6 +778,9 @@
                 content: "+ ";
                 color: var(--mint);
             }
+            .tree li.more a {
+                color: var(--muted);
+            }
 
             .window video {
                 width: 100%;
@@ -1993,6 +1996,11 @@
                             <li class="row">
                                 <svg aria-hidden="true">
                                     <use href="#i-db" /></svg
+                                ><span class="name">DuckDB</span>
+                            </li>
+                            <li class="row">
+                                <svg aria-hidden="true">
+                                    <use href="#i-db" /></svg
                                 ><span class="name">Snowflake</span>
                             </li>
                             <li class="row">
@@ -2013,7 +2021,19 @@
                                     >Valkey, KeyDB, Dragonfly</span
                                 >
                             </li>
-                            <li class="more">more engines planned</li>
+                            <li class="row">
+                                <svg aria-hidden="true">
+                                    <use href="#i-db" /></svg
+                                ><span class="name">ClickHouse</span>
+                            </li>
+                            <li class="more">
+                                any other database with an ODBC driver, such as
+                                IBM Db2, through the bundled
+                                <a
+                                    href="https://github.com/ShayanAbbas1/dbdelve/blob/main/docs/odbc.md"
+                                    >ODBC bridge</a
+                                >
+                            </li>
                         </ul>
                     </div>
                 </div>
