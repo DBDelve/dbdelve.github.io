@@ -1411,6 +1411,174 @@
             .foot p a {
                 color: var(--muted);
             }
+            .sponsors {
+                overflow: hidden;
+            }
+            .sp-tier {
+                display: grid;
+                gap: 14px;
+                padding: 20px;
+                border-bottom: 1px solid var(--hair);
+            }
+            @media (min-width: 720px) {
+                .sp-tier {
+                    grid-template-columns: 160px minmax(0, 1fr);
+                    gap: 24px;
+                    padding: 22px 24px;
+                }
+            }
+            .sp-label {
+                margin: 0;
+                font: 500 12px/1.4 var(--mono);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: var(--faint);
+            }
+            .sp-label span {
+                display: block;
+                margin-top: 4px;
+                letter-spacing: 0;
+                text-transform: none;
+                color: rgb(95 224 208 / 0.75);
+            }
+            .sp-list {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+                gap: 10px;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                min-width: 0;
+            }
+            .sp-list li {
+                min-width: 0;
+                max-width: 100%;
+            }
+            .sp-list a {
+                text-decoration: none;
+            }
+            .sp-name {
+                font-size: 14px;
+                line-height: 1.35;
+                color: var(--text);
+                overflow-wrap: anywhere;
+            }
+            .sp-logo {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                max-width: 100%;
+                padding: 16px 18px 12px;
+                border-radius: var(--r-panel);
+                border: 1px solid var(--hair);
+                background: rgb(255 255 255 / 0.035);
+                text-align: center;
+                transition:
+                    background-color 0.15s,
+                    border-color 0.15s;
+            }
+            .sp-logo img {
+                width: auto;
+                height: var(--logo, 56px);
+                max-width: min(100%, 220px);
+                object-fit: contain;
+                border-radius: var(--r-control);
+            }
+            .sp-logo.lg {
+                --logo: 88px;
+                padding: 22px 26px 14px;
+            }
+            .sp-logo.lg img {
+                max-width: min(100%, 280px);
+            }
+            a.sp-logo:hover,
+            a.sp-person:hover {
+                border-color: var(--hair-strong);
+                background: rgb(255 255 255 / 0.06);
+            }
+            .sp-person {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                max-width: 100%;
+                min-height: 62px;
+                padding: 8px 14px 8px 8px;
+                border-radius: var(--r-panel);
+                border: 1px solid var(--hair);
+                background: rgb(255 255 255 / 0.035);
+                transition:
+                    background-color 0.15s,
+                    border-color 0.15s;
+            }
+            .sp-person img {
+                flex: none;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            .sp-chip {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                height: 32px;
+                max-width: 100%;
+                padding: 0 12px 0 4px;
+                border-radius: var(--r-control);
+                border: 1px solid var(--hair);
+            }
+            .sp-chip img {
+                flex: none;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            .sp-chip .sp-name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .sp-text {
+                display: block;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                font-size: 15px;
+                line-height: 1.7;
+                color: var(--muted);
+            }
+            .sp-text li {
+                display: inline;
+            }
+            .sp-text li:not(:last-child)::after {
+                content: ", ";
+            }
+            .sp-empty {
+                margin: 0;
+                padding: 22px 24px;
+                border-bottom: 1px solid var(--hair);
+            }
+            .sp-foot {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 14px 24px;
+                padding: 16px 20px;
+                font-size: 14px;
+            }
+            @media (min-width: 720px) {
+                .sp-foot {
+                    padding: 16px 24px;
+                }
+            }
+            .sp-foot p {
+                margin: 0;
+                color: var(--faint);
+            }
 
             @media (prefers-reduced-motion: reduce) {
                 html {
@@ -1549,6 +1717,7 @@
                         <li class="opt">
                             <a href="https://discord.gg/7PegWzwqCm">Discord</a>
                         </li>
+                        <li class="opt"><a href="#sponsors">Sponsor</a></li>
                         <li>
                             <a href="https://github.com/ShayanAbbas1/dbdelve"
                                 >GitHub</a
@@ -2639,6 +2808,38 @@
                     </div>
                 </div>
             </section>
+
+            <section class="sec" id="sponsors" aria-labelledby="sponsors-h">
+                <div class="wrap">
+                    <div class="sec-head">
+                        <p class="group">
+                            <svg aria-hidden="true"><use href="#i-chev" /></svg
+                            >Sponsors <span class="depth">−900 m</span>
+                        </p>
+                        <h2 id="sponsors-h">Who chips in.</h2>
+                        <p>
+                            Sponsors are thanked by name here and in the README.
+                            Sponsorship doesn't buy feature priority or a say in
+                            the roadmap; ideas from everyone are weighed the
+                            same way.
+                        </p>
+                    </div>
+                    <div class="panel sponsors">
+                        <div data-sponsor-tiers hidden></div>
+                        <p class="sp-empty" data-sponsor-empty hidden>
+                            No sponsors yet. DBDelve stays free either way.
+                        </p>
+                        <div class="sp-foot">
+                            <p>On Patreon, from $5 a month.</p>
+                            <a
+                                class="btn btn-ghost"
+                                href="https://www.patreon.com/cw/ShayanAbbas1"
+                                >Sponsor on Patreon</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <footer>
@@ -2682,6 +2883,7 @@
                                     >Discord</a
                                 >
                             </li>
+                            <li><a href="#sponsors">Sponsor</a></li>
                             <li>
                                 <a
                                     href="https://github.com/ShayanAbbas1/dbdelve/blob/main/LICENSE"
@@ -2813,6 +3015,110 @@
                         io.observe(v);
                     });
                 }
+            })();
+        </script>
+        <script>
+            (() => {
+                const tiersEl = document.querySelector("[data-sponsor-tiers]");
+                const emptyEl = document.querySelector("[data-sponsor-empty]");
+                const tiers = [
+                    { title: "Platinum", min: 200, box: "sp-logo lg", size: 88 },
+                    { title: "Gold", min: 100, box: "sp-logo", size: 56 },
+                    { title: "Silver", min: 50, box: "sp-person", size: 44 },
+                    { title: "Bronze", min: 20, box: "sp-chip", size: 24 },
+                    { title: "Supporters", min: 5 },
+                ];
+
+                const httpUrl = (value) => {
+                    try {
+                        const url = new URL(value);
+                        return /^https?:$/.test(url.protocol) ? url.href : null;
+                    } catch {
+                        return null;
+                    }
+                };
+                const make = (tag, className, text) => {
+                    const el = document.createElement(tag);
+                    if (className) el.className = className;
+                    if (text != null) el.textContent = text;
+                    return el;
+                };
+                const avatar = (src, size) => {
+                    const img = make("img");
+                    img.src = src;
+                    img.alt = "";
+                    img.width = size;
+                    img.height = size;
+                    img.loading = "lazy";
+                    img.decoding = "async";
+                    img.referrerPolicy = "no-referrer";
+                    img.addEventListener("error", () => img.remove());
+                    return img;
+                };
+
+                const item = (s, tier) => {
+                    const li = make("li");
+                    if (!tier.box) {
+                        li.textContent = s.name;
+                        return li;
+                    }
+                    const link = tier.min >= 50 ? httpUrl(s.link) : null;
+                    const box = make(link ? "a" : "div", tier.box);
+                    if (link) {
+                        box.href = link;
+                        box.rel = "noopener nofollow";
+                    }
+                    const src = httpUrl(s.avatar);
+                    if (src) box.append(avatar(src, tier.size));
+                    box.append(make("span", "sp-name", s.name));
+                    li.append(box);
+                    return li;
+                };
+
+                fetch("sponsors/sponsors.json", { cache: "no-cache" })
+                    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+                    .then((data) => {
+                        const sponsors = (Array.isArray(data) ? data : [])
+                            .filter(
+                                (s) =>
+                                    s &&
+                                    typeof s.name === "string" &&
+                                    s.name.trim() &&
+                                    Number(s.monthlyDollars) > 0,
+                            )
+                            .map((s) => ({ ...s, name: s.name.trim() }));
+                        if (!sponsors.length) {
+                            emptyEl.hidden = false;
+                            return;
+                        }
+                        const groups = new Map(tiers.map((t) => [t, []]));
+                        sponsors.forEach((s) =>
+                            groups
+                                .get(
+                                    tiers.find(
+                                        (t) => Number(s.monthlyDollars) >= t.min,
+                                    ) ?? tiers.at(-1),
+                                )
+                                .push(s),
+                        );
+                        groups.forEach((members, tier) => {
+                            if (!members.length) return;
+                            const row = make("div", "sp-tier");
+                            const label = make("p", "sp-label", tier.title);
+                            label.append(
+                                make("span", null, `$${tier.min}+ a month`),
+                            );
+                            const list = make(
+                                "ul",
+                                tier.box ? "sp-list" : "sp-text",
+                            );
+                            members.forEach((s) => list.append(item(s, tier)));
+                            row.append(label, list);
+                            tiersEl.append(row);
+                        });
+                        tiersEl.hidden = false;
+                    })
+                    .catch(() => {});
             })();
         </script>
     </body>
