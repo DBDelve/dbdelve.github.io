@@ -28,6 +28,27 @@ const escapeXml = (value) =>
 
 const LOGO_DOLLARS = 100;
 
+// SVG text doesn't wrap, so the names are broken into lines that fit the width.
+const LINE_CHARS = 90;
+
+function composeNames(composer, sponsorships) {
+    if (!sponsorships.length) return;
+    const lines = [];
+    for (const { sponsor } of sponsorships) {
+        const last = lines.at(-1);
+        if (last && `${last}, ${sponsor.name}`.length <= LINE_CHARS) {
+            lines[lines.length - 1] = `${last}, ${sponsor.name}`;
+        } else {
+            if (last) lines[lines.length - 1] += ",";
+            lines.push(sponsor.name);
+        }
+    }
+    composer.addSpan(20).addTitle("Supporters").addSpan(15);
+    // addText writes its argument into the SVG unescaped.
+    for (const line of lines) composer.addText(escapeXml(line));
+    composer.addSpan(10);
+}
+
 export default defineConfig({
     outputDir: "../sponsors",
     cacheFile: fileURLToPath(new URL("./.cache.json", import.meta.url)),
@@ -35,7 +56,7 @@ export default defineConfig({
     formats: ["json", "svg"],
     width: 800,
     tiers: [
-        { title: "Supporters", preset: tierPresets.none },
+        { title: "Supporters", compose: composeNames },
         { title: "Bronze", monthlyDollars: 20, preset: tierPresets.medium },
         { title: "Silver", monthlyDollars: 50, preset: tierPresets.large },
         { title: "Gold", monthlyDollars: LOGO_DOLLARS, preset: tierPresets.xl },

@@ -1552,21 +1552,6 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-            .sp-text {
-                display: block;
-                margin: 0;
-                padding: 0;
-                list-style: none;
-                font-size: 15px;
-                line-height: 1.7;
-                color: var(--muted);
-            }
-            .sp-text li {
-                display: inline;
-            }
-            .sp-text li:not(:last-child)::after {
-                content: ", ";
-            }
             .sp-foot {
                 padding: 16px 20px;
             }
@@ -2903,9 +2888,8 @@
                                 <p class="sp-label">
                                     Supporter <span>$5/month</span>
                                 </p>
-                                <p class="sp-perk">Your name on the website</p>
+                                <p class="sp-perk">Your name in the README</p>
                             </div>
-                            <ul class="sp-text" hidden></ul>
                         </div>
                         <div class="sp-foot">
                             <a
@@ -3102,7 +3086,6 @@
                     { min: 100, box: "sp-logo", size: 56 },
                     { min: 50, box: "sp-person", size: 44 },
                     { min: 20, box: "sp-chip", size: 24 },
-                    { min: 5 },
                 ];
 
                 const httpUrl = (value) => {
@@ -3134,10 +3117,6 @@
 
                 const item = (s, tier) => {
                     const li = make("li");
-                    if (!tier.box) {
-                        li.textContent = s.name;
-                        return li;
-                    }
                     const link = tier.min >= 50 ? httpUrl(s.link) : null;
                     const box = make(link ? "a" : "div", tier.box);
                     if (link) {
@@ -3163,17 +3142,12 @@
                                     Number(s.monthlyDollars) > 0,
                             )
                             .map((s) => ({ ...s, name: s.name.trim() }));
-                        const groups = new Map(tiers.map((t) => [t, []]));
-                        sponsors.forEach((s) =>
-                            groups
-                                .get(
-                                    tiers.find(
-                                        (t) => Number(s.monthlyDollars) >= t.min,
-                                    ) ?? tiers.at(-1),
-                                )
-                                .push(s),
-                        );
-                        groups.forEach((members, tier) => {
+                        const tierOf = (s) =>
+                            tiers.find((t) => Number(s.monthlyDollars) >= t.min);
+                        tiers.forEach((tier) => {
+                            const members = sponsors.filter(
+                                (s) => tierOf(s) === tier,
+                            );
                             if (!members.length) return;
                             const list = document.querySelector(
                                 `[data-tier="${tier.min}"] ul`,
