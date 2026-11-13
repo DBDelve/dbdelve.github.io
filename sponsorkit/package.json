@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "sponsorkit": "19.0.0"
+  }
+}
