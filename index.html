@@ -1417,15 +1417,19 @@
             .sponsors {
                 overflow: hidden;
             }
+            .sponsors [hidden] {
+                display: none;
+            }
             .sp-tier {
                 display: grid;
+                align-items: start;
                 gap: 14px;
                 padding: 20px;
                 border-bottom: 1px solid var(--hair);
             }
             @media (min-width: 720px) {
                 .sp-tier {
-                    grid-template-columns: 160px minmax(0, 1fr);
+                    grid-template-columns: 280px minmax(0, 1fr);
                     gap: 24px;
                     padding: 22px 24px;
                 }
@@ -1438,11 +1442,15 @@
                 color: var(--faint);
             }
             .sp-label span {
-                display: block;
-                margin-top: 4px;
+                padding-left: 6px;
                 letter-spacing: 0;
                 text-transform: none;
                 color: rgb(95 224 208 / 0.75);
+            }
+            .sp-perk {
+                margin: 6px 0 0;
+                font-size: 15px;
+                line-height: 1.5;
             }
             .sp-list {
                 display: flex;
@@ -1559,28 +1567,13 @@
             .sp-text li:not(:last-child)::after {
                 content: ", ";
             }
-            .sp-empty {
-                margin: 0;
-                padding: 22px 24px;
-                border-bottom: 1px solid var(--hair);
-            }
             .sp-foot {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: space-between;
-                gap: 14px 24px;
                 padding: 16px 20px;
-                font-size: 14px;
             }
             @media (min-width: 720px) {
                 .sp-foot {
                     padding: 16px 24px;
                 }
-            }
-            .sp-foot p {
-                margin: 0;
-                color: var(--faint);
             }
 
             @media (prefers-reduced-motion: reduce) {
@@ -2861,24 +2854,67 @@
                             <svg aria-hidden="true"><use href="#i-chev" /></svg
                             >Sponsors <span class="depth">−900 m</span>
                         </p>
-                        <h2 id="sponsors-h">Who chips in.</h2>
-                        <p>
-                            Sponsors are thanked by name here and in the README.
-                            Sponsorship doesn't buy feature priority or a say in
-                            the roadmap; ideas from everyone are weighed the
-                            same way.
-                        </p>
+                        <h2 id="sponsors-h">Support DBDelve's development</h2>
                     </div>
                     <div class="panel sponsors">
-                        <div data-sponsor-tiers hidden></div>
-                        <p class="sp-empty" data-sponsor-empty hidden>
-                            No sponsors yet. DBDelve stays free either way.
-                        </p>
+                        <div class="sp-tier" data-tier="200">
+                            <div>
+                                <p class="sp-label">
+                                    Platinum <span>$200/month</span>
+                                </p>
+                                <p class="sp-perk">
+                                    A big logo at the top, linked to your site
+                                </p>
+                            </div>
+                            <ul class="sp-list" hidden></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="100">
+                            <div>
+                                <p class="sp-label">
+                                    Gold <span>$100/month</span>
+                                </p>
+                                <p class="sp-perk">
+                                    Your logo, linked to your site
+                                </p>
+                            </div>
+                            <ul class="sp-list" hidden></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="50">
+                            <div>
+                                <p class="sp-label">
+                                    Silver <span>$50/month</span>
+                                </p>
+                                <p class="sp-perk">
+                                    A bigger avatar, linked to your site
+                                </p>
+                            </div>
+                            <ul class="sp-list" hidden></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="20">
+                            <div>
+                                <p class="sp-label">
+                                    Bronze <span>$20/month</span>
+                                </p>
+                                <p class="sp-perk">
+                                    Your name and avatar in the README and on
+                                    the website
+                                </p>
+                            </div>
+                            <ul class="sp-list" hidden></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="5">
+                            <div>
+                                <p class="sp-label">
+                                    Supporter <span>$5/month</span>
+                                </p>
+                                <p class="sp-perk">Your name on the website</p>
+                            </div>
+                            <ul class="sp-text" hidden></ul>
+                        </div>
                         <div class="sp-foot">
-                            <p>On Patreon, from $5 a month.</p>
                             <a
                                 class="btn btn-ghost"
-                                href="https://www.patreon.com/cw/ShayanAbbas1"
+                                href="https://www.patreon.com/membership/30003257"
                                 >Sponsor on Patreon</a
                             >
                         </div>
@@ -3065,14 +3101,12 @@
         </script>
         <script>
             (() => {
-                const tiersEl = document.querySelector("[data-sponsor-tiers]");
-                const emptyEl = document.querySelector("[data-sponsor-empty]");
                 const tiers = [
-                    { title: "Platinum", min: 200, box: "sp-logo lg", size: 88 },
-                    { title: "Gold", min: 100, box: "sp-logo", size: 56 },
-                    { title: "Silver", min: 50, box: "sp-person", size: 44 },
-                    { title: "Bronze", min: 20, box: "sp-chip", size: 24 },
-                    { title: "Supporters", min: 5 },
+                    { min: 200, box: "sp-logo lg", size: 88 },
+                    { min: 100, box: "sp-logo", size: 56 },
+                    { min: 50, box: "sp-person", size: 44 },
+                    { min: 20, box: "sp-chip", size: 24 },
+                    { min: 5 },
                 ];
 
                 const httpUrl = (value) => {
@@ -3133,10 +3167,6 @@
                                     Number(s.monthlyDollars) > 0,
                             )
                             .map((s) => ({ ...s, name: s.name.trim() }));
-                        if (!sponsors.length) {
-                            emptyEl.hidden = false;
-                            return;
-                        }
                         const groups = new Map(tiers.map((t) => [t, []]));
                         sponsors.forEach((s) =>
                             groups
@@ -3149,20 +3179,12 @@
                         );
                         groups.forEach((members, tier) => {
                             if (!members.length) return;
-                            const row = make("div", "sp-tier");
-                            const label = make("p", "sp-label", tier.title);
-                            label.append(
-                                make("span", null, `$${tier.min}+ a month`),
-                            );
-                            const list = make(
-                                "ul",
-                                tier.box ? "sp-list" : "sp-text",
+                            const list = document.querySelector(
+                                `[data-tier="${tier.min}"] ul`,
                             );
                             members.forEach((s) => list.append(item(s, tier)));
-                            row.append(label, list);
-                            tiersEl.append(row);
+                            list.hidden = false;
                         });
-                        tiersEl.hidden = false;
                     })
                     .catch(() => {});
             })();
