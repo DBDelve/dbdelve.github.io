@@ -1420,37 +1420,28 @@
             .sponsors [hidden] {
                 display: none;
             }
-            .sp-tier {
-                display: grid;
-                align-items: start;
-                gap: 14px;
+            .sp-intro {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 14px 24px;
                 padding: 20px;
-                border-bottom: 1px solid var(--hair);
             }
-            @media (min-width: 720px) {
-                .sp-tier {
-                    grid-template-columns: 280px minmax(0, 1fr);
-                    gap: 24px;
-                    padding: 22px 24px;
-                }
-            }
-            .sp-label {
+            .sp-intro p {
                 margin: 0;
-                font: 500 12px/1.4 var(--mono);
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                color: var(--faint);
-            }
-            .sp-label span {
-                padding-left: 6px;
-                letter-spacing: 0;
-                text-transform: none;
-                color: rgb(95 224 208 / 0.75);
-            }
-            .sp-perk {
-                margin: 6px 0 0;
                 font-size: 15px;
                 line-height: 1.5;
+            }
+            .sp-tier {
+                padding: 20px;
+                border-top: 1px solid var(--hair);
+            }
+            @media (min-width: 720px) {
+                .sp-intro,
+                .sp-tier {
+                    padding: 22px 24px;
+                }
             }
             .sp-list {
                 display: flex;
@@ -1530,14 +1521,6 @@
             }
             .sp-names a:hover {
                 text-decoration-color: var(--mint);
-            }
-            .sp-foot {
-                padding: 16px 20px;
-            }
-            @media (min-width: 720px) {
-                .sp-foot {
-                    padding: 16px 24px;
-                }
             }
 
             @media (prefers-reduced-motion: reduce) {
@@ -1677,7 +1660,6 @@
                         <li class="opt">
                             <a href="https://discord.gg/7PegWzwqCm">Discord</a>
                         </li>
-                        <li class="opt"><a href="#sponsors">Sponsor</a></li>
                         <li>
                             <a href="https://github.com/ShayanAbbas1/dbdelve"
                                 >GitHub</a
@@ -2817,67 +2799,25 @@
                         <h2 id="sponsors-h">Support DBDelve's development</h2>
                     </div>
                     <div class="panel sponsors">
-                        <div class="sp-tier" data-tier="200">
-                            <div>
-                                <p class="sp-label">
-                                    Platinum <span>$200/month</span>
-                                </p>
-                                <p class="sp-perk">
-                                    Larger logo in the README and on the site,
-                                    linked to your site
-                                </p>
-                            </div>
-                            <ul class="sp-list" hidden></ul>
-                        </div>
-                        <div class="sp-tier" data-tier="100">
-                            <div>
-                                <p class="sp-label">
-                                    Gold <span>$100/month</span>
-                                </p>
-                                <p class="sp-perk">
-                                    Logo in the README and on the site, linked
-                                    to your site
-                                </p>
-                            </div>
-                            <ul class="sp-list" hidden></ul>
-                        </div>
-                        <div class="sp-tier" data-tier="50">
-                            <div>
-                                <p class="sp-label">
-                                    Silver <span>$50/month</span>
-                                </p>
-                                <p class="sp-perk">
-                                    Name in the README and on the site, linked
-                                    to your site
-                                </p>
-                            </div>
-                            <ul class="sp-names" hidden></ul>
-                        </div>
-                        <div class="sp-tier" data-tier="20">
-                            <div>
-                                <p class="sp-label">
-                                    Bronze <span>$20/month</span>
-                                </p>
-                                <p class="sp-perk">
-                                    Name in the README and on the site
-                                </p>
-                            </div>
-                            <ul class="sp-names" hidden></ul>
-                        </div>
-                        <div class="sp-tier" data-tier="5">
-                            <div>
-                                <p class="sp-label">
-                                    Supporter <span>$5/month</span>
-                                </p>
-                                <p class="sp-perk">Name in the README</p>
-                            </div>
-                        </div>
-                        <div class="sp-foot">
+                        <div class="sp-intro">
+                            <p>Sponsors keep DBDelve free and open source.</p>
                             <a
                                 class="btn btn-ghost"
                                 href="https://www.patreon.com/membership/30003257"
                                 >Sponsor on Patreon</a
                             >
+                        </div>
+                        <div class="sp-tier" data-tier="200" hidden>
+                            <ul class="sp-list"></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="100" hidden>
+                            <ul class="sp-list"></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="50" hidden>
+                            <ul class="sp-names"></ul>
+                        </div>
+                        <div class="sp-tier" data-tier="20" hidden>
+                            <ul class="sp-names"></ul>
                         </div>
                     </div>
                 </div>
@@ -3141,7 +3081,7 @@
                                 `[data-tier="${tier.min}"] ul`,
                             );
                             members.forEach((s) => list.append(item(s, tier)));
-                            list.hidden = false;
+                            list.closest(".sp-tier").hidden = false;
                         });
                     })
                     .catch(() => {});
