@@ -1775,7 +1775,7 @@
                             ><a
                                 data-asset="win"
                                 href="https://github.com/ShayanAbbas1/dbdelve/releases/latest"
-                                >Windows .zip</a
+                                >Windows .exe</a
                             ><span class="sep">·</span
                             ><a
                                 data-asset="linux"
@@ -2789,17 +2789,28 @@
                                         ><code
                                             >dbdelve-<span data-v
                                                 >&lt;version&gt;</span
-                                            >-windows-x86_64.zip</code
+                                            >-windows-x86_64-setup.exe</code
                                         ></a
                                     >
                                 </li>
-                                <li>Unzip it wherever you like.</li>
                                 <li>
-                                    Run <code>dbdelve.exe</code>. There's no
-                                    installer.
+                                    Run it, and pick AppData (just for you) or
+                                    Program Files (all users).
+                                </li>
+                                <li>
+                                    It's unsigned, so SmartScreen warns on the
+                                    first run: More info, then Run anyway.
                                 </li>
                             </ol>
-                            <p class="pane-foot">x86_64.</p>
+                            <p class="pane-foot">
+                                Or the portable
+                                <a
+                                    data-asset="winzip"
+                                    href="https://github.com/ShayanAbbas1/dbdelve/releases/latest"
+                                    >zip</a
+                                >: unzip it and run <code>dbdelve.exe</code>.
+                                Both update themselves. x86_64.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -2964,7 +2975,8 @@
                         const arch = arm ? "aarch64" : "x86_64";
                         const assets = {
                             mac: find(`DBDelve-${v}.dmg`),
-                            win: find(`dbdelve-${v}-windows-x86_64.zip`),
+                            win: find(`dbdelve-${v}-windows-x86_64-setup.exe`),
+                            winzip: find(`dbdelve-${v}-windows-x86_64.zip`),
                             linux:
                                 find(`dbdelve-${v}-linux-${arch}.tar.gz`) ||
                                 find(`dbdelve-${v}-linux-x86_64.tar.gz`),
