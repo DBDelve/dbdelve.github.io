@@ -5,6 +5,8 @@ import { BENCH_CAVEATS, BENCH_METHOD, BENCH_ROWS } from "@/data/benchmarks";
 import { chapterAttrs } from "@/data/chapters";
 import { LINKS } from "@/data/site";
 
+// WebM (VP9) first, MP4 for browsers without it. Posters are each clip's first
+// frame, so playback starts without a jump.
 // loading="lazy" on <video> defers the poster and media requests until near
 // the viewport; it is newer than Astro's attribute types, hence the spread.
 const lazyMedia = { loading: "lazy" } as Record<string, string>;
@@ -73,17 +75,21 @@ const lazyMedia = { loading: "lazy" } as Record<string, string>;
     <figure class="clip frame" data-lit>
       <video
         data-clip
-        src="/media/launch.mp4"
         poster="/media/launch.webp"
         width="1280"
         height="806"
         muted
         loop
         playsinline
-        controls
+        tabindex="0"
         preload="none"
         {...lazyMedia}
-        aria-describedby="clip-launch"></video>
+        aria-label="Launch recording. Select to play or pause."
+        aria-describedby="clip-launch"
+      >
+        <source src="/media/launch.webm" type="video/webm" />
+        <source src="/media/launch.mp4" type="video/mp4" />
+      </video>
       <figcaption id="clip-launch">
         <b>Launch.</b> From the Dock to a connected window, with the last results already on screen: nothing is re-run. Screen
         recording from the README, no sound.
@@ -92,17 +98,21 @@ const lazyMedia = { loading: "lazy" } as Record<string, string>;
     <figure class="clip frame" data-lit>
       <video
         data-clip
-        src="/media/scroll.mp4"
         poster="/media/scroll.webp"
         width="1280"
         height="806"
         muted
         loop
         playsinline
-        controls
+        tabindex="0"
         preload="none"
         {...lazyMedia}
-        aria-describedby="clip-scroll"></video>
+        aria-label="Scrolling recording. Select to play or pause."
+        aria-describedby="clip-scroll"
+      >
+        <source src="/media/scroll.webm" type="video/webm" />
+        <source src="/media/scroll.mp4" type="video/mp4" />
+      </video>
       <figcaption id="clip-scroll">
         <b>A million rows.</b> Scrolling the whole 1,002,000-row result of <code>SELECT * FROM events</code>, 107 columns
         wide. Screen recording from the README, no sound.
@@ -112,6 +122,14 @@ const lazyMedia = { loading: "lazy" } as Record<string, string>;
 </section>
 
 <style is:global>
+  /* No native controls: the clip itself toggles playback (lib/ui/clips.ts). */
+  [data-clip] {
+    cursor: pointer;
+  }
+  /* The torch still lights the recordings, but without the frame's glowing ring. */
+  .clip::after {
+    display: none;
+  }
   .bench__grid {
     display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);

@@ -1,6 +1,9 @@
 // The README's two screen recordings: muted loops that play only while on
-// screen, and never on their own when the visitor asked for reduced motion
-// (the controls are always there). A pause by the visitor sticks.
+// screen, and never on their own when the visitor asked for reduced motion.
+// There are no native controls: a click, or Space/Enter when focused, plays or
+// pauses (so the loop can always be stopped). A pause by the visitor sticks.
+const toggle = (v: HTMLVideoElement) => (v.paused ? void v.play().catch(() => {}) : v.pause());
+
 export function initClips(root: ParentNode, signal: AbortSignal) {
   const motion = matchMedia("(prefers-reduced-motion: reduce)");
   const clips = [...root.querySelectorAll<HTMLVideoElement>("[data-clip]")];
@@ -25,6 +28,16 @@ export function initClips(root: ParentNode, signal: AbortSignal) {
   for (const v of clips) {
     v.addEventListener("pause", () => (auto.has(v) ? auto.delete(v) : held.add(v)), { signal });
     v.addEventListener("play", () => held.delete(v), { signal });
+    v.addEventListener("click", () => toggle(v), { signal });
+    v.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key !== " " && e.key !== "Enter") return;
+        e.preventDefault();
+        toggle(v);
+      },
+      { signal }
+    );
     io.observe(v);
   }
   motion.addEventListener("change", () => motion.matches && clips.forEach(pause), { signal });

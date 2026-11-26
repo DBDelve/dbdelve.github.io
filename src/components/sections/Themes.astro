@@ -27,7 +27,7 @@ const compareSizes = "(min-width: 960px) 720px, calc(100vw - 2.5rem)";
     <input id="compare-range" type="range" min="0" max="100" value="50" aria-valuetext="50% dark" />
   </div>
   <div class="themes__aside">
-    <figure class="frame" data-lit>
+    <figure class="themes__picker frame" data-lit>
       <Image src={themes} widths={[480, 960]} sizes="(min-width: 960px) 360px, 100vw" alt="The theme picker, with themes imported from Zed and VS Code." {...img} />
       <figcaption>The theme picker, with imported themes listed beside the built-in ones.</figcaption>
     </figure>
@@ -39,6 +39,10 @@ const compareSizes = "(min-width: 960px) 720px, calc(100vw - 2.5rem)";
 </section>
 
 <style is:global>
+  /* The torch still lights the picker, but without the frame's glowing ring. */
+  .themes__picker::after {
+    display: none;
+  }
   .themes {
     display: grid;
     grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
