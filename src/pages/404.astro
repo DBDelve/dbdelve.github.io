@@ -1,0 +1,60 @@
+---
+import { LINKS, SITE } from "@/data/site";
+import Layout from "@/layouts/Layout.astro";
+import type { SeoMeta } from "@/lib/seo";
+
+const seo: SeoMeta = {
+  title: `Page not found · ${SITE.name}`,
+  description: "This page does not exist. Head back to the DBDelve home page.",
+  noindex: true,
+};
+---
+
+<Layout seo={seo}>
+  <main id="main" class="lost">
+    <a class="lost__brand" href="/">
+      <img src="/assets/dbdelve.svg" alt="" width="96" height="96" />
+      <span class="sr-only">DBDelve home</span>
+    </a>
+    <p class="lost__code">404</p>
+    <h1>Too deep. Nothing down here.</h1>
+    <p class="lost__text">The page you are looking for does not exist, or it moved.</p>
+    <div class="actions actions--center">
+      <a class="btn btn--primary" href="/">Back to the surface</a>
+      <a class="btn" href={LINKS.issues}>Report a broken link</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .lost {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.5rem;
+    min-height: 100svh;
+    padding: 3rem var(--gutter);
+    text-align: center;
+    background: linear-gradient(var(--color-twilight), var(--color-abyss));
+  }
+  .lost__brand img {
+    border-radius: var(--radius-lg);
+  }
+  .lost__code {
+    margin: 1rem 0 0;
+    color: var(--color-mint);
+    font-family: var(--font-mono);
+    letter-spacing: 0.2em;
+  }
+  h1 {
+    margin: 0;
+    font-size: var(--step-3);
+  }
+  .lost__text {
+    max-width: 32rem;
+    color: var(--color-text-2);
+  }
+  .actions--center {
+    justify-content: center;
+  }
+</style>
