@@ -8,6 +8,9 @@ node_modules/
 # astro
 .astro/
 
+# cloudflare
+.wrangler/
+
 # logs
 npm-debug.log*
 pnpm-debug.log*
