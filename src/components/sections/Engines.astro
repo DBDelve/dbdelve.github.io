@@ -1,0 +1,318 @@
+---
+// 3 · Supported Engines: the sonar. Native engines are toggle buttons with
+// equal initial prominence (nothing is selected until the visitor picks);
+// ODBC engines are plain text on the dashed outer ring, because they need a
+// driver the visitor installs and a logo would overstate the support.
+import { chapterAttrs } from "@/data/chapters";
+import { NATIVE_ENGINES, ODBC_ENGINES } from "@/data/engines";
+import { LINKS } from "@/data/site";
+
+const n = NATIVE_ENGINES.length;
+const m = ODBC_ENGINES.length;
+---
+
+<section class="chapter engines" {...chapterAttrs("engines")}>
+  <div class="engines__copy">
+    <h2>{n === 11 ? "Eleven" : n} engines natively. The rest through ODBC.</h2>
+    <p>
+      DBDelve speaks each engine’s own protocol. Anything else with an ODBC driver is reachable through the bundled ODBC
+      bridge, once that driver is installed.
+    </p>
+    <p class="fine"><a href={LINKS.odbc}>Connecting through ODBC</a></p>
+  </div>
+  <div class="sonar" data-sonar>
+    <div class="sonar__sweep" aria-hidden="true"></div>
+    <div class="sonar__ring sonar__ring--odbc" aria-hidden="true"></div>
+    <div class="sonar__ring sonar__ring--native" aria-hidden="true"></div>
+    <img class="sonar__core" src="/assets/dbdelve.svg" alt="" width="64" height="64" />
+    <h3 class="sr-only sonar__heading">Native engines</h3>
+    <ul class="sonar__list sonar__list--native" aria-label="Native engines">
+      {
+        NATIVE_ENGINES.map((e, i) => (
+          <li style={`--i:${i};--n:${n}`} data-at={i / n}>
+            <button type="button" aria-pressed="false" tabindex={i === 0 ? 0 : -1} data-engine={e.name} data-note={e.note}>
+              <span class="sonar__logo" style={`mask-image:url(${e.mark.src})`} aria-hidden="true" />
+              <span class="sonar__name">{e.name}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+    <h3 class="sr-only sonar__heading">Through the ODBC bridge, with that driver installed</h3>
+    <ul class="sonar__list sonar__list--odbc">
+      {
+        ODBC_ENGINES.map((name, i) => (
+          <li style={`--i:${i};--n:${m}`} data-at={i / m}>
+            {name}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="sonar__foot">
+    <p class="sonar__readout" data-sonar-readout aria-live="polite">Pick an engine to read about it.</p>
+    <p class="sonar__legend" aria-hidden="true">
+      <span class="key key--native"></span>Native, built in <span class="key key--odbc"></span>Through the ODBC bridge
+    </p>
+  </div>
+</section>
+
+<style is:global>
+  .engines {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: 3rem;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .engines__copy h2 {
+    font-size: var(--step-3);
+    font-weight: 400;
+  }
+  .sonar {
+    --R: min(270px, 38vw);
+    --sweep: 0turn;
+    position: relative;
+    aspect-ratio: 1;
+    width: min(640px, 100%);
+    justify-self: center;
+  }
+  .sonar__ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--color-line);
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+  }
+  .sonar__ring--native {
+    width: 62%;
+    height: 62%;
+    border-color: rgb(95 224 208 / 0.3);
+  }
+  .sonar__ring--odbc {
+    width: 100%;
+    height: 100%;
+    border-style: dashed;
+  }
+  .sonar__sweep {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(from var(--sweep), rgb(95 224 208 / 0.22), transparent 18%);
+    mask: radial-gradient(circle, #000 69%, transparent 70%);
+  }
+  .sonar__core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    width: 56px;
+    border-radius: 14px;
+  }
+  .sonar__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    inset: 0;
+  }
+  .sonar__list li {
+    --a: calc(var(--i) / var(--n) * 1turn - 0.25turn);
+    --ping: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    white-space: nowrap;
+    transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a))) translate(-50%, -50%);
+  }
+  .sonar__list--native {
+    --r: calc(var(--R) * 0.62);
+  }
+  /* Every native mark starts equal: same size, same contrast. Only the sweep's
+     ping, hover, focus and an intentional pick change one. */
+  .sonar__list--native button {
+    --size: clamp(44px, 5.2vw, 58px);
+    position: relative;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    width: var(--size);
+    height: var(--size);
+    padding: 0;
+    border-radius: 50%;
+    background: rgb(2 16 21 / 0.72);
+    color: rgb(234 247 245 / calc(0.78 + var(--ping) * 0.22));
+    border: 1px solid rgb(95 224 208 / calc(0.3 + var(--ping) * 0.7));
+    box-shadow: 0 0 calc(var(--ping) * 22px) rgb(95 224 208 / calc(var(--ping) * 0.45));
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      scale 0.25s var(--ease-out);
+  }
+  .sonar__logo {
+    width: 46%;
+    height: 46%;
+    background: currentColor;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+  /* The name shows on hover and focus; the selected one is also read out below. */
+  .sonar__name {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    translate: -50% 0;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: rgb(2 16 21 / 0.85);
+    opacity: 0;
+    transition: opacity 0.15s;
+    pointer-events: none;
+  }
+  .sonar__list--native button:hover .sonar__name,
+  .sonar__list--native button:focus-visible .sonar__name,
+  .sonar__list--native button[aria-pressed="true"] .sonar__name {
+    opacity: 1;
+  }
+  .sonar__list--native button:hover {
+    color: var(--color-text);
+    scale: 1.08;
+  }
+  .sonar__list--native button[aria-pressed="true"] {
+    background: var(--color-mint);
+    color: var(--color-ink);
+    border-color: var(--color-mint);
+    scale: 1.12;
+    box-shadow:
+      0 0 0 5px rgb(95 224 208 / 0.18),
+      0 0 26px rgb(95 224 208 / 0.4);
+  }
+  .sonar__list--odbc {
+    --r: var(--R);
+  }
+  .sonar__list--odbc li {
+    color: rgb(169 203 200 / calc(0.65 + var(--ping) * 0.35));
+    font-size: 0.8rem;
+    padding: 0.15rem 0.4rem;
+  }
+  .sonar__foot {
+    grid-column: 2;
+    justify-self: center;
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  .sonar__readout {
+    min-height: 1.6em;
+    margin: 0;
+    color: var(--color-text-2);
+  }
+  .sonar__readout b {
+    color: var(--color-text);
+  }
+  .sonar__legend {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--color-text-2);
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .key {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+  .key--native {
+    border: 1px solid var(--color-mint);
+  }
+  .key--odbc {
+    border: 1px dashed var(--color-text-2);
+    margin-left: 1rem;
+  }
+  @media (max-width: 959px) {
+    .engines {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .sonar__foot {
+      grid-column: 1;
+    }
+  }
+  /* The sonar collapses into a logo grid and a plain list on a phone. */
+  @media (max-width: 640px) {
+    .sonar {
+      aspect-ratio: auto;
+      display: grid;
+      gap: 1.5rem;
+    }
+    .sonar__sweep,
+    .sonar__ring,
+    .sonar__core {
+      display: none;
+    }
+    .sonar__list {
+      position: static;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .sonar__list li {
+      position: static;
+      transform: none;
+    }
+    .sonar__list--native {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
+    .sonar__list--native button {
+      --size: auto;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-md);
+      padding: 0.7rem 0.2rem 0.5rem;
+      gap: 0.35rem;
+      scale: none !important;
+    }
+    .sonar__logo {
+      width: 26px;
+      height: 26px;
+    }
+    .sonar__name {
+      position: static;
+      translate: none;
+      opacity: 1;
+      background: none;
+      padding: 0;
+      font-size: 0.7rem;
+      color: inherit;
+    }
+    .sonar__list--odbc li {
+      padding: 0.15rem 0.55rem;
+      border: 1px dashed var(--color-line);
+      border-radius: 999px;
+    }
+    .sonar__heading.sr-only {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      clip-path: none;
+      white-space: normal;
+      font-size: var(--step--1);
+      color: var(--color-text-2);
+      font-weight: 500;
+    }
+    .sonar__legend {
+      display: none;
+    }
+  }
+</style>

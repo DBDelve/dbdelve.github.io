@@ -1,0 +1,185 @@
+---
+// 6 · Into the Data: feature compositions with real screenshots.
+import { Image } from "astro:assets";
+
+import completion from "@/assets/shots/completion.webp";
+import connectionForm from "@/assets/shots/connection-form.webp";
+import projects from "@/assets/shots/projects.webp";
+import shortcuts from "@/assets/shots/shortcuts.webp";
+import tableDark from "@/assets/shots/table-dark.webp";
+import { chapterAttrs } from "@/data/chapters";
+
+const img = { loading: "lazy", decoding: "async", quality: 80 } as const;
+---
+
+<section class="chapter features" {...chapterAttrs("features")}>
+  <div class="chapter__intro">
+    <h2>Into the data</h2>
+    <p>Everything here works today.</p>
+  </div>
+  <div class="bento">
+    <article class="cell cell--row" data-lit>
+      <div class="cell__text">
+        <h3>Read a row in full</h3>
+        <p>The row panel shows every value of one row, with JSON highlighted, and lets you edit the long ones.</p>
+      </div>
+      <Image src={tableDark} widths={[640, 960, 1280]} sizes="(min-width: 960px) 680px, 100vw" alt="The grid with the row panel open on the right." {...img} />
+    </article>
+    <article class="cell cell--keys" data-lit>
+      <div class="cell__text">
+        <h3>Keyboard first</h3>
+        <p>One palette for commands, tables, saved queries, history and connections. Every shortcut can be rebound.</p>
+      </div>
+      <Image src={shortcuts} widths={[352, 704]} sizes="(min-width: 960px) 330px, 100vw" alt="The Shortcuts page in Settings: every action with its key binding." {...img} />
+    </article>
+    <article class="cell cell--complete" data-lit>
+      <div class="cell__text">
+        <h3>Completion that knows your schema</h3>
+        <p>Tables, and a table’s columns after its name and a dot. After <code>JOIN</code>, the condition its foreign keys imply.</p>
+      </div>
+      <Image src={completion} widths={[640, 960, 1280]} sizes="(min-width: 960px) 680px, 100vw" alt="Completing accounts. to its columns in a join." {...img} />
+    </article>
+    <article class="cell cell--prod" data-lit>
+      <div class="cell__text">
+        <h3>Never mistake prod for staging</h3>
+        <p>Each connection is isolated and can color the title bar. Run it read-only, read-write or with full access.</p>
+      </div>
+      <Image src={connectionForm} widths={[480, 960]} sizes="(min-width: 960px) 520px, 100vw" alt="The connection form, grouped into connection, security and behaviour." {...img} />
+    </article>
+    <article class="cell cell--projects" data-lit>
+      <div class="cell__text">
+        <h3>Bring your connections</h3>
+        <p>Import every saved connection, passwords and SSH settings included, from DBeaver, or TablePlus on macOS. Group them into projects.</p>
+      </div>
+      <Image src={projects} widths={[480, 960]} sizes="(min-width: 960px) 520px, 100vw" alt="The palette scoped to connections, grouped into two projects." {...img} />
+    </article>
+    <article class="cell cell--files">
+      <h3>Drop a file, get a query</h3>
+      <p class="filetypes" aria-hidden="true"><span>.csv</span><span>.xlsx</span><span>.parquet</span><span>.json</span></p>
+      <p>CSV, Excel, Parquet or JSON opens in DuckDB, in memory, as a query you can change.</p>
+    </article>
+    <article class="cell cell--ssh">
+      <h3>Your SSH, not a reimplementation</h3>
+      <p>Tunnels run through your own <code>ssh</code>, so your config, agent and hardware keys work. AWS SSM is there too.</p>
+    </article>
+    <article class="cell cell--tokens">
+      <h3>Short-lived tokens</h3>
+      <p>A Password command prints the password at every login, so cloud IAM auth keeps working after the token expires.</p>
+    </article>
+  </div>
+</section>
+
+<style is:global>
+  .bento {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-areas:
+      "row row row row keys keys"
+      "row row row row keys keys"
+      "cmp cmp cmp cmp keys keys"
+      "prod prod prod proj proj proj"
+      "file file ssh ssh tok tok";
+  }
+  .cell {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-glass);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+  }
+  .cell h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .cell p {
+    color: var(--color-text-2);
+    margin: 0;
+  }
+  .cell__text {
+    padding: 1.4rem 1.5rem 1.2rem;
+  }
+  .cell > img {
+    margin-top: auto;
+    width: 100%;
+    object-fit: cover;
+  }
+  .cell--row {
+    grid-area: row;
+    border-radius: var(--radius-lg);
+  }
+  .cell--row > img {
+    flex: 1;
+    min-height: 0;
+    object-position: 85% 20%;
+  }
+  .cell--keys {
+    grid-area: keys;
+  }
+  .cell--keys > img {
+    flex: 1;
+    min-height: 0;
+    object-position: top;
+    padding: 0 1rem;
+  }
+  .cell--complete {
+    grid-area: cmp;
+  }
+  .cell--prod {
+    grid-area: prod;
+  }
+  .cell--projects {
+    grid-area: proj;
+  }
+  .cell--prod > img,
+  .cell--projects > img {
+    aspect-ratio: 16 / 9;
+    object-position: 50% 30%;
+  }
+  .cell--files {
+    grid-area: file;
+  }
+  .cell--ssh {
+    grid-area: ssh;
+  }
+  .cell--tokens {
+    grid-area: tok;
+  }
+  .cell--files,
+  .cell--ssh,
+  .cell--tokens {
+    padding: 1.4rem 1.5rem;
+    border-radius: var(--radius-sm);
+    background: rgb(2 16 21 / 0.25);
+  }
+  .filetypes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.75rem 0 1rem !important;
+  }
+  .filetypes span {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-mint);
+    border: 1px solid rgb(95 224 208 / 0.35);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
+  }
+  @media (max-width: 959px) {
+    .bento {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "row" "keys" "cmp" "prod" "proj" "file" "ssh" "tok";
+    }
+    .cell--row > img {
+      aspect-ratio: 16 / 10;
+      flex: none;
+    }
+    .cell--keys > img {
+      max-height: 420px;
+    }
+  }
+</style>

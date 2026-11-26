@@ -1,0 +1,302 @@
+---
+// 5 · Under Pressure: the project's published benchmarks, with methodology
+// and caveats, and the two README screen recordings.
+import { BENCH_CAVEATS, BENCH_METHOD, BENCH_ROWS } from "@/data/benchmarks";
+import { chapterAttrs } from "@/data/chapters";
+import { LINKS } from "@/data/site";
+
+// loading="lazy" on <video> defers the poster and media requests until near
+// the viewport; it is newer than Astro's attribute types, hence the spread.
+const lazyMedia = { loading: "lazy" } as Record<string, string>;
+---
+
+<section class="chapter bench" {...chapterAttrs("benchmarks")} data-bench>
+  <div class="chapter__intro">
+    <h2>Under pressure</h2>
+    <p>The same Postgres table, queried in DBDelve 0.3.6 and DBeaver 25.3.1. Shorter is better on every row.</p>
+  </div>
+
+  <div class="bench__grid">
+    <table class="bench__table">
+      <caption class="sr-only">DBDelve compared with DBeaver, median values</caption>
+      <thead>
+        <tr><th scope="col">Measure</th><th scope="col">DBDelve</th><th scope="col">DBeaver</th></tr>
+      </thead>
+      <tbody>
+        {
+          BENCH_ROWS.map((r) => (
+            <tr style={`--a:${r.a};--b:${r.b}`}>
+              <th scope="row">
+                {r.measure}
+                {r.footnote && (
+                  <sup>
+                    <a href="#fn-1m" aria-label="See the footnote">*</a>
+                  </sup>
+                )}
+              </th>
+              <td>{r.aLabel}</td>
+              <td>{r.bLabel}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+
+    <div class="bench__provenance">
+      <h3>Where these numbers come from</h3>
+      <p>
+        <strong>Published by the DBDelve project</strong> in <a href={LINKS.benchmarks}>BENCHMARKS.md</a>, measured
+        2026-10-11. Not re-measured for this site, and not independently verified.
+      </p>
+      <dl>
+        {
+          BENCH_METHOD.map(([k, v]) => (
+            <>
+              <dt>{k}</dt>
+              <dd set:html={v} />
+            </>
+          ))
+        }
+      </dl>
+      <p id="fn-1m" class="fine">
+        * Not a normal use case: the whole table is pulled into memory on purpose, and the result alone is 4 GB of data.
+        Both apps show their first rows about 0.1 s after the keypress at every size.
+      </p>
+      <details>
+        <summary>Caveats</summary>
+        <ul>{BENCH_CAVEATS.map((c) => <li>{c}</li>)}</ul>
+      </details>
+    </div>
+  </div>
+
+  <div class="clips">
+    <figure class="clip frame" data-lit>
+      <video
+        data-clip
+        src="/media/launch.mp4"
+        poster="/media/launch.webp"
+        width="1280"
+        height="806"
+        muted
+        loop
+        playsinline
+        controls
+        preload="none"
+        {...lazyMedia}
+        aria-describedby="clip-launch"></video>
+      <figcaption id="clip-launch">
+        <b>Launch.</b> From the Dock to a connected window, with the last results already on screen: nothing is re-run. Screen
+        recording from the README, no sound.
+      </figcaption>
+    </figure>
+    <figure class="clip frame" data-lit>
+      <video
+        data-clip
+        src="/media/scroll.mp4"
+        poster="/media/scroll.webp"
+        width="1280"
+        height="806"
+        muted
+        loop
+        playsinline
+        controls
+        preload="none"
+        {...lazyMedia}
+        aria-describedby="clip-scroll"></video>
+      <figcaption id="clip-scroll">
+        <b>A million rows.</b> Scrolling the whole 1,002,000-row result of <code>SELECT * FROM events</code>, 107 columns
+        wide. Screen recording from the README, no sound.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style is:global>
+  .bench__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .bench__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .bench__table thead th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--color-text-2);
+    font-size: var(--step--1);
+    padding: 0 0 0.75rem;
+  }
+  .bench__table tbody th {
+    text-align: left;
+    font-weight: 400;
+    padding: 1rem 1rem 1rem 0;
+    width: 38%;
+    border-top: 1px solid var(--color-line);
+  }
+  .bench__table td {
+    position: relative;
+    border-top: 1px solid var(--color-line);
+    padding: 1rem 0.5rem 1rem 0;
+    width: 31%;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    vertical-align: middle;
+  }
+  .bench__table td::before {
+    content: "";
+    display: block;
+    height: 8px;
+    border-radius: 4px;
+    margin-bottom: 0.45rem;
+    width: calc(var(--w) * 100%);
+    transform-origin: left;
+    transition: transform 1.1s var(--ease-out);
+  }
+  .bench__table td:nth-child(2)::before {
+    --w: calc(var(--a) / var(--b));
+    background: var(--color-mint);
+  }
+  .bench__table td:nth-child(3)::before {
+    --w: 1;
+    background: rgb(169 203 200 / 0.45);
+  }
+  .bench__table td:nth-child(2) {
+    color: var(--color-mint);
+  }
+  .bench__table td:nth-child(3) {
+    color: var(--color-text-2);
+  }
+  .js .bench:not(.is-in) .bench__table td::before {
+    transform: scaleX(0);
+  }
+  .bench__table sup a {
+    text-decoration: none;
+    padding: 0 0.2em;
+  }
+  .bench__provenance {
+    background: var(--color-glass);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    font-size: 0.95rem;
+  }
+  .bench__provenance h3 {
+    font-size: var(--step-0);
+    font-weight: 600;
+  }
+  .bench__provenance dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem 1rem;
+    margin: 1.25rem 0;
+  }
+  .bench__provenance dt {
+    color: var(--color-text-2);
+  }
+  .bench__provenance dd {
+    margin: 0;
+  }
+  .bench details summary {
+    cursor: pointer;
+    font-weight: 500;
+    min-height: 32px;
+  }
+  .bench details ul {
+    list-style: disc;
+    padding-left: 1.2em;
+    color: var(--color-text-2);
+  }
+  .clips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+    margin-top: clamp(3rem, 7vh, 5rem);
+  }
+  .clip video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1280 / 806;
+    background: var(--color-midnight);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.45);
+  }
+  .clip figcaption b {
+    color: var(--color-text);
+  }
+  @media (max-width: 959px) {
+    .bench__grid,
+    .clips {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .bench__table,
+    .bench__table tbody,
+    .bench__table tr {
+      display: block;
+    }
+    .bench__table thead {
+      display: none;
+    }
+    .bench__table tr {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--color-line);
+      padding: 0.75rem 0;
+    }
+    .bench__table tbody th {
+      grid-column: 1 / -1;
+      border: 0;
+      padding: 0 0 0.4rem;
+      width: auto;
+    }
+    .bench__table td {
+      display: block;
+      width: auto;
+      border: 0;
+      padding: 0 0.75rem 0 0;
+    }
+    .bench__table td:nth-child(2)::after {
+      content: " DBDelve";
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: var(--color-text-2);
+    }
+    .bench__table td:nth-child(3)::after {
+      content: " DBeaver";
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .js .bench:not(.is-in) .bench__table td::before {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  import { mount } from "@/lib/lifecycle";
+  import { initClips } from "@/lib/ui/clips";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  mount((signal) => {
+    initClips(document, signal);
+    // The bars grow in once, as the table comes into view.
+    const bench = document.querySelector<HTMLElement>("[data-bench]");
+    const st = bench
+      ? ScrollTrigger.create({ trigger: bench, start: "top 70%", once: true, onEnter: () => bench.classList.add("is-in") })
+      : null;
+    return () => st?.kill();
+  });
+</script>

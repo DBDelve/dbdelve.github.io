@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig, tierPresets } from "sponsorkit";
 
 // Keyed by the patron's Patreon profile URL, as it appears in `link` in
-// sponsors/sponsors.json: { "<url>": { "name", "link", "avatar", "hide" } }.
+// public/sponsors/sponsors.json: { "<url>": { "name", "link", "avatar", "hide" } }.
 const overrides = JSON.parse(
     readFileSync(new URL("./overrides.json", import.meta.url), "utf8"),
 );
@@ -50,7 +50,7 @@ const names = (title) => (composer, sponsorships) => {
 };
 
 export default defineConfig({
-    outputDir: "../sponsors",
+    outputDir: "../public/sponsors",
     cacheFile: fileURLToPath(new URL("./.cache.json", import.meta.url)),
     name: "sponsors",
     formats: ["json", "svg"],

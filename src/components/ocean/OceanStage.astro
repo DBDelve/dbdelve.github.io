@@ -1,0 +1,41 @@
+---
+// The environment layers: the water column canvas, the diver, and the canvas
+// for bubbles, plankton and the flashlight beam. Decorative: everything they
+// show is also said in text. Without JS the body gradient carries the descent.
+import Diver from "./Diver.astro";
+---
+
+<canvas class="ocean" data-ocean aria-hidden="true"></canvas>
+<Diver />
+<canvas class="fx" data-fx aria-hidden="true"></canvas>
+
+<style is:global>
+  .ocean,
+  .fx,
+  .diver {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .ocean {
+    z-index: 0;
+  }
+  .diver {
+    z-index: 2;
+    overflow: visible;
+    /* The glow separates the silhouette from dark water; it fades as the diver becomes the logo. */
+    filter: drop-shadow(0 0 2px rgb(191 230 255 / calc(0.55 * (1 - var(--finale, 0)))));
+  }
+  .fx {
+    z-index: 3;
+    mix-blend-mode: screen;
+  }
+  /* Without JS there is no live diver: the logo's own diver is shown in the finale instead. */
+  html:not(.js) .ocean,
+  html:not(.js) .diver,
+  html:not(.js) .fx {
+    display: none;
+  }
+</style>

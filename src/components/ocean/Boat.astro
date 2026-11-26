@@ -1,0 +1,135 @@
+---
+// The expedition boat at the waterline. Part of the page, so it scrolls away
+// overhead as the camera goes under. The rope at its stern is where the
+// descent line starts; lib/expedition/ocean.ts draws the rest of it.
+---
+
+<div class="boat" aria-hidden="true">
+  <svg viewBox="0 0 240 110" focusable="false">
+    <g class="boat__float">
+      <g class="boat__under">
+        <path d="M20 80 L232 80 L226 74 Q222 92 200 96 L40 96 Q24 94 20 84 Z"></path>
+      </g>
+      <path class="boat__rope" d="M14 30 L16 80"></path>
+      <path class="boat__frame" d="M36 62 L14 28 M14 28 L22 26 M26 62 L18 38"></path>
+      <path class="boat__hull" d="M18 62 L214 62 Q230 60 238 50 L226 74 Q223 80 220 80 L20 80 Q18 72 18 62 Z"></path>
+      <path class="boat__stripe" d="M22 70 L228 70"></path>
+      <rect class="boat__tank" x="58" y="47" width="9" height="15" rx="4"></rect>
+      <rect class="boat__tank" x="70" y="47" width="9" height="15" rx="4"></rect>
+      <rect class="boat__tank" x="82" y="47" width="9" height="15" rx="4"></rect>
+      <path class="boat__rail" d="M40 62 V52 H112 V62 M64 52 V62 M88 52 V62"></path>
+      <rect class="boat__cabin" x="118" y="32" width="62" height="30" rx="4"></rect>
+      <path class="boat__roof" d="M114 32 H186"></path>
+      <rect class="boat__glass" x="124" y="38" width="50" height="9" rx="2"></rect>
+      <path class="boat__mast" d="M164 31 V8 M156 14 H172"></path>
+      <path class="boat__flag" d="M164 9 H182 L176 14 L182 19 H164 Z"></path>
+    </g>
+  </svg>
+  <span class="boat__anchor" data-line-anchor></span>
+</div>
+
+<style is:global>
+  /* Moored over the diver's lane: the descent line hangs where the diver swims,
+     so going under needs no swim across the hero. Drawn mirrored, stern right. */
+  .boat {
+    --boat-w: clamp(150px, 19vw, 260px);
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    right: calc(var(--lane) - var(--boat-w) * 16 / 240);
+    top: calc(var(--waterline) - var(--boat-w) * 80 / 240);
+    width: var(--boat-w);
+    aspect-ratio: 240 / 110;
+  }
+  .boat svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    scale: -1 1;
+  }
+  .boat__float {
+    transform-box: view-box;
+    transform-origin: 50% 72%;
+    animation: boat-ride 6.5s ease-in-out infinite;
+  }
+  .boat__hull {
+    fill: var(--color-ink);
+  }
+  .boat__under {
+    fill: var(--color-ink);
+    opacity: 0.32;
+    transform-box: view-box;
+    transform-origin: 50% 72%;
+    animation: hull-refract 2.8s ease-in-out infinite;
+  }
+  .boat__stripe {
+    stroke: var(--color-mint);
+    stroke-width: 2.5;
+  }
+  .boat__cabin {
+    fill: var(--color-text);
+  }
+  .boat__roof {
+    stroke: var(--color-ink);
+    stroke-width: 4;
+    stroke-linecap: round;
+  }
+  .boat__glass {
+    fill: var(--color-shelf);
+  }
+  .boat__rail,
+  .boat__frame,
+  .boat__mast {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .boat__frame {
+    stroke-width: 3;
+  }
+  .boat__rope {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 1.6;
+    opacity: 0.8;
+  }
+  .boat__tank,
+  .boat__flag {
+    fill: var(--color-mint);
+  }
+  .boat__anchor {
+    position: absolute;
+    left: calc(224 / 240 * 100%);
+    top: calc(80 / 110 * 100%);
+    width: 1px;
+    height: 1px;
+  }
+  @keyframes boat-ride {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+      transform: translateY(2.5px) rotate(1.2deg);
+    }
+  }
+  /* The hull under water wavers, as anything seen through the surface does. */
+  @keyframes hull-refract {
+    0%,
+    100% {
+      transform: skewX(0) scaleY(1);
+    }
+    50% {
+      transform: skewX(4deg) scaleY(1.06);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .boat__float,
+    .boat__under {
+      animation: none;
+    }
+  }
+</style>

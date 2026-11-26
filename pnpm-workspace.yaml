@@ -1,0 +1,12 @@
+allowBuilds:
+  esbuild: true
+  sharp: true
+
+minimumReleaseAge: 1440
+
+minimumReleaseAgeExclude:
+  - typescript
+  - astro
+  - "@astrojs/*"
+
+saveExact: true
