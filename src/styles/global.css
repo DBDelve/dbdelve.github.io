@@ -48,7 +48,9 @@
 
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --measure: 62ch;
-  --waterline: 15vh;
+  /* Air above the water on the first screen; the floor keeps the boat clear of the
+     top bar on short screens. Matches waterlineY() in lib/expedition/controller.ts. */
+  --waterline: max(15vh, 152px);
   /* Lane beside the content where the diver swims (matches the routes' R92). */
   --lane: 92px;
 }
