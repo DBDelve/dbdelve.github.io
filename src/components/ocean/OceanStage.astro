@@ -1,0 +1,117 @@
+---
+// The environment layers: the water column canvas, the diver, and the canvas
+// for bubbles, plankton and the flashlight beam. Decorative: everything they
+// show is also said in text. Without JS the body gradient carries the descent.
+import { surfaceWave } from "@/lib/expedition/ocean";
+
+import Diver from "./Diver.astro";
+
+// The canvas's surface at t = 0, in px from the left edge, the waterline at y = PAD.
+// Drawn as page markup so the first paint already has the sky and the waves.
+const PAD = 12;
+const BAND = 160;
+const WIDTH = 3840;
+const pts: string[] = [];
+for (let x = 0; x <= WIDTH; x += 16) pts.push(`${x} ${(PAD + surfaceWave(x, 0)).toFixed(2)}`);
+const edge = pts.join(" L");
+---
+
+<div class="sky" aria-hidden="true">
+  <div class="sky__water sky__haze"></div>
+  <svg width={WIDTH} height={PAD + BAND} viewBox={`0 0 ${WIDTH} ${PAD + BAND}`} focusable="false">
+    <defs>
+      <linearGradient id="sky-band" x1="0" y1={PAD} x2="0" y2={PAD + BAND} gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="rgb(210 245 240 / .34)"></stop>
+        <stop offset=".25" stop-color="rgb(191 230 255 / .12)"></stop>
+        <stop offset="1" stop-color="rgb(191 230 255 / 0)"></stop>
+      </linearGradient>
+    </defs>
+    <path d={`M0 0 L${edge} L${WIDTH} 0 Z`} fill="#a7ddd6"></path>
+    <g class="sky__water">
+      <path d={`M0 ${PAD + BAND} L${edge} L${WIDTH} ${PAD + BAND} Z`} fill="url(#sky-band)"></path>
+      <path d={`M${edge}`} fill="none" stroke="rgb(255 255 255 / .8)" stroke-width="1.5"></path>
+    </g>
+  </svg>
+</div>
+<canvas class="ocean" data-ocean aria-hidden="true"></canvas>
+<Diver />
+<canvas class="fx" data-fx aria-hidden="true"></canvas>
+
+<style is:global>
+  .ocean,
+  .fx,
+  .diver {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .ocean {
+    z-index: 0;
+  }
+  .diver {
+    z-index: 2;
+    overflow: visible;
+    /* The glow separates the silhouette from dark water; it fades as the diver becomes the logo. */
+    filter: drop-shadow(0 0 2px rgb(191 230 255 / calc(0.55 * (1 - var(--finale, 0)))));
+  }
+  .fx {
+    z-index: 3;
+    mix-blend-mode: screen;
+  }
+  /* Without JS there is no live diver: the logo's own diver is shown in the finale instead. */
+  html:not(.js) .ocean,
+  html:not(.js) .diver,
+  html:not(.js) .fx {
+    display: none;
+  }
+  /* The ocean canvas's first frame as markup: air, the resting surface and the
+     haze under it. Tied to the page like the waterline. Without JS it stays. */
+  .sky {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    background: linear-gradient(#dff4ef, #a7ddd6) top / 100% var(--waterline) no-repeat;
+  }
+  .sky__haze {
+    position: absolute;
+    top: var(--waterline);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgb(150 225 215 / 0.2), rgb(90 190 190 / 0.06) 55%, rgb(18 122 122 / 0));
+  }
+  .sky svg {
+    position: absolute;
+    left: 0;
+    top: calc(var(--waterline) - 12px);
+  }
+  /* Until the controller draws its first frame the rig sits at the SVG origin
+     and the canvases are blank: the static sky stands in. The translucent water
+     crossfades with the canvas; the opaque air stays until the canvas is opaque,
+     or the water gradient on body would show through and darken it mid-fade. */
+  .ocean,
+  .diver,
+  .fx,
+  .sky__water {
+    transition: opacity 0.6s ease;
+  }
+  .ocean-ready .sky__water {
+    opacity: 0;
+  }
+  .ocean-ready .sky {
+    visibility: hidden;
+    transition: visibility 0s 0.6s;
+  }
+  html:not(.ocean-ready) .ocean,
+  html:not(.ocean-ready) .diver,
+  html:not(.ocean-ready) .fx {
+    opacity: 0;
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+// The finale: the original dbdelve.svg, layer by layer, in its own geometry.
+// The layers come straight from public/assets/dbdelve.svg (split at build time
+// by lib/brand/logoLayers.ts; the file itself is never edited). The swimming
+// diver settles into the logo's diver pose, mapped through this SVG's own
+// transform, and its torch lights the data bars. Without JS the logo's own
+// diver is shown and the composition is simply the logo.
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { splitLogo } from "@/lib/brand/logoLayers";
+
+const logo = splitLogo(readFileSync(join(process.cwd(), "public/assets/dbdelve.svg"), "utf8"));
+// The tile spans 100..924 in the logo's 1024 viewBox; crop to it so the logo fills the reveal.
+const viewBox = "100 100 824 824";
+---
+
+<div class="logo-reveal" data-logo-reveal data-lit aria-hidden="true">
+  <svg class="logo-reveal__svg" viewBox={viewBox} focusable="false" data-logo-svg>
+    <defs set:html={logo.defs} />
+    <g class="logo-reveal__tile" set:html={logo.tile} />
+    <g clip-path="url(#logo-tile)">
+      {
+        logo.layers.map((l) =>
+          l.name === "bars" ? (
+            <g class={`logo-layer logo-layer--${l.name}`} data-logo-bars set:html={l.markup} />
+          ) : (
+            <g class={`logo-layer logo-layer--${l.name}`} set:html={l.markup} />
+          )
+        )
+      }
+    </g>
+  </svg>
+</div>
+
+<style is:global>
+  /* --logo (0..1, the controller) is how far the diver has settled into the
+     logo pose; --lit is the torch on the composition. The water, kelp and
+     shafts gather around the diver as it arrives; the bars wake in its light. */
+  .logo-reveal {
+    --lit: 0;
+    --logo: 0;
+    position: relative;
+    width: clamp(240px, 40vh, 380px);
+    aspect-ratio: 1;
+    margin: 0 auto 2.5rem;
+  }
+  .logo-reveal__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .js .logo-reveal__tile {
+    opacity: calc(0.18 + var(--logo) * 0.82);
+  }
+  .js .logo-layer--shafts,
+  .js .logo-layer--kelpBack,
+  .js .logo-layer--kelpFront,
+  .js .logo-layer--seabed {
+    opacity: calc(var(--logo) * var(--logo));
+  }
+  .js .logo-layer--bars {
+    opacity: calc(0.16 + max(var(--lit), var(--logo)) * 0.84);
+  }
+  .js .logo-layer--light,
+  .js .logo-layer--bubbles {
+    opacity: var(--logo);
+  }
+  .js .logo-layer--diver {
+    visibility: hidden;
+  }
+  /* A soft halo, so the tile reads as lit water in the abyss rather than a sticker. */
+  .logo-reveal::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(18 122 122 / 0.32), rgb(11 82 87 / 0.1) 60%, transparent);
+    opacity: calc(0.35 + var(--logo) * 0.65);
+  }
+</style>

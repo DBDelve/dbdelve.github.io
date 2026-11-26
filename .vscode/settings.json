@@ -1,0 +1,30 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit",
+    "source.organizeImports": "never"
+  },
+  "oxc.enable": true,
+  "oxc.lint.run": "onType",
+  "oxc.typeAware": true,
+  "oxc.requireConfig": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "pnpm-lock.yaml": true
+  }
+}

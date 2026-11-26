@@ -1,0 +1,118 @@
+---
+// 8 · Installation: platform-specific steps; the visitor's platform opens first.
+import { chapterAttrs } from "@/data/chapters";
+import { LINKS } from "@/data/site";
+
+const installSh = "curl -fsSL https://raw.githubusercontent.com/ShayanAbbas1/dbdelve/main/install.sh | sh";
+---
+
+<section class="chapter install" {...chapterAttrs("install")}>
+  <div class="chapter__intro">
+    <h2>Get it running</h2>
+    <p>Pick your platform. Updating, building from source and where your data lives are in <a href={LINKS.install}>docs/install.md</a>.</p>
+  </div>
+  <div class="install__tabs" data-tabs data-platform-tabs data-copy-root>
+    <div role="tablist" aria-label="Platform">
+      <button type="button" role="tab" id="t-mac" aria-controls="p-mac" aria-selected="true" data-platform="mac">macOS</button>
+      <button type="button" role="tab" id="t-linux" aria-controls="p-linux" aria-selected="false" tabindex="-1" data-platform="linux">Linux</button>
+      <button type="button" role="tab" id="t-win" aria-controls="p-win" aria-selected="false" tabindex="-1" data-platform="win">Windows</button>
+    </div>
+    <div role="tabpanel" id="p-mac" aria-labelledby="t-mac" class="install__panel">
+      <p class="req">Apple Silicon, macOS 12 or later.</p>
+      <h3>Homebrew</h3>
+      <div class="cmd"><pre><code>brew install --cask ShayanAbbas1/dbdelve/dbdelve</code></pre><button type="button" data-copy>Copy</button></div>
+      <p class="fine">The app isn’t notarized, so the cask clears the quarantine flag macOS would otherwise refuse it over.</p>
+      <h3>Without Homebrew</h3>
+      <div class="cmd"><pre><code>{installSh}</code></pre><button type="button" data-copy>Copy</button></div>
+    </div>
+    <div role="tabpanel" id="p-linux" aria-labelledby="t-linux" class="install__panel" hidden>
+      <p class="req">x86_64 or aarch64. Needs a Vulkan or OpenGL driver and a Secret Service keyring, such as gnome-keyring or KWallet.</p>
+      <h3>One line, no root</h3>
+      <div class="cmd"><pre><code>{installSh}</code></pre><button type="button" data-copy>Copy</button></div>
+      <p class="fine">Installs under <code>~/.local</code>.</p>
+      <h3>Arch Linux (AUR)</h3>
+      <div class="cmd"><pre><code>yay -S dbdelve-bin</code></pre><button type="button" data-copy>Copy</button></div>
+      <p class="fine">Packaged by <a href={LINKS.aurPackager}>@0PandaDEV</a>. Thanks!</p>
+      <h3>AppImage</h3>
+      <div class="cmd"><pre><code>chmod +x dbdelve-*.AppImage &amp;&amp; ./dbdelve-*.AppImage</code></pre><button type="button" data-copy>Copy</button></div>
+      <p class="fine">The AppImage needs FUSE 2. A tarball is on <a href={LINKS.release}>the latest release</a> too.</p>
+    </div>
+    <div role="tabpanel" id="p-win" aria-labelledby="t-win" class="install__panel" hidden>
+      <p class="req">x86_64.</p>
+      <h3>Installer</h3>
+      <p>
+        Run the setup <code>.exe</code> from <a href={LINKS.release}>the latest release</a>. It asks for AppData (just for you)
+        or Program Files (all users). It is unsigned, so SmartScreen warns on first run.
+      </p>
+      <h3>Portable</h3>
+      <p>Unzip the zip from the same release and run <code>dbdelve.exe</code>.</p>
+    </div>
+    <p class="copy-status" role="status" aria-live="polite" data-copy-status></p>
+  </div>
+</section>
+
+<style is:global>
+  .install__panel {
+    max-width: 46rem;
+  }
+  .install__panel h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.5rem;
+  }
+  .req {
+    color: var(--color-text-2);
+  }
+  .cmd {
+    display: flex;
+    align-items: stretch;
+    background: rgb(0 6 8 / 0.65);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+  }
+  .cmd pre {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(191 230 255 / 0.3) transparent;
+    margin: 0;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9rem;
+    color: var(--color-foam);
+  }
+  .cmd button {
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    background: none;
+    cursor: pointer;
+    border: 0;
+    border-left: 1px solid var(--color-line);
+    padding: 0 1rem;
+    min-width: 4.5rem;
+  }
+  .cmd button:hover {
+    background: rgb(234 247 245 / 0.08);
+  }
+  .copy-status {
+    min-height: 1.5em;
+    color: var(--color-mint);
+    font-size: var(--step--1);
+    margin-top: 1rem;
+  }
+</style>
+
+<script>
+  import { mount } from "@/lib/lifecycle";
+  import { initCopy } from "@/lib/ui/copy";
+  import { initTabs } from "@/lib/ui/tabs";
+
+  mount((signal) => {
+    const install = document.getElementById("install");
+    const root = install?.querySelector<HTMLElement>("[data-copy-root]");
+    if (!install || !root) return;
+    initTabs(install, signal);
+    initCopy(root, signal);
+  });
+</script>

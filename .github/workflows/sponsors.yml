@@ -45,7 +45,7 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add sponsors
+          git add public/sponsors
           if git diff --cached --quiet; then
             echo "Sponsors unchanged."
             exit 0

@@ -1,0 +1,47 @@
+{
+  "name": "dbdelve-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The DBDelve website: a static-first Astro site published to GitHub Pages.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "astro": "astro",
+    "build": "astro check && astro build",
+    "check": "astro check",
+    "deploy": "pnpm build && wrangler deploy",
+    "dev": "astro dev",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "fmt:deps": "syncpack format",
+    "lint": "astro sync && oxlint --type-aware .",
+    "lint:deps": "syncpack lint",
+    "lint:fix": "astro sync && oxlint --type-aware --fix .",
+    "preview": "astro preview",
+    "test": "node --test tests/",
+    "type-check": "astro sync && oxlint --type-aware --type-check ."
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.6",
+    "@fontsource-variable/ibm-plex-sans": "5.3.0",
+    "@fontsource-variable/lilex": "5.3.0",
+    "astro": "7.4.13",
+    "gsap": "3.15.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/node": "26.6.7",
+    "oxfmt": "0.80.0",
+    "oxlint": "1.95.0",
+    "oxlint-tsgolint": "7.0.2008",
+    "syncpack": "15.3.4",
+    "tailwindcss": "4.3.5",
+    "typescript": "6.0.3",
+    "wrangler": "4.168.0"
+  },
+  "engines": {
+    "node": ">=24.18.0"
+  },
+  "packageManager": "pnpm@12.23.0"
+}

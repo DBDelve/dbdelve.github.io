@@ -1,0 +1,62 @@
+---
+import { LINKS } from "@/data/site";
+---
+
+<footer class="foot">
+  <a class="foot__brand" href="#surface"><img src="/assets/dbdelve.svg" alt="" width="28" height="28" />DBDelve</a>
+  <p>
+    Free and open source, licensed under the <a href={LINKS.license}>GPL-3.0</a>. No telemetry. The only request DBDelve
+    makes on its own is an update check at startup and every six hours after, which you can turn off in Settings.
+  </p>
+  <nav aria-label="Footer">
+    <ul>
+      <li><a href={LINKS.repo}>GitHub</a></li>
+      <li><a href={LINKS.releases}>Releases</a></li>
+      <li><a href={LINKS.discord}>Discord</a></li>
+      <li><a href="#sponsors">Sponsor</a></li>
+      <li><a href={LINKS.license}>License</a></li>
+    </ul>
+  </nav>
+  <p class="fine">DBDelve © 2026 Shayan Abbas and contributors. Screenshots are of the real app; nothing here is simulated.</p>
+</footer>
+
+<style is:global>
+  .foot {
+    margin-top: 6rem;
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    color: var(--color-text-2);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .foot p {
+    margin: 0;
+    max-width: 60ch;
+  }
+  .foot__brand {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .foot__brand img {
+    border-radius: 7px;
+  }
+  .foot ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1.25rem;
+  }
+  .foot nav a {
+    color: var(--color-text-2);
+    text-decoration: none;
+  }
+  .foot nav a:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+</style>

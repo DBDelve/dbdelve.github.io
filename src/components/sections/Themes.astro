@@ -1,0 +1,125 @@
+---
+// 7 · A Closer Look: dark against light, with a native range input as the handle.
+import { Image } from "astro:assets";
+
+import queryDark from "@/assets/shots/query-dark.webp";
+import queryLight from "@/assets/shots/query-light.webp";
+import themes from "@/assets/shots/themes.webp";
+import { chapterAttrs } from "@/data/chapters";
+
+const img = { loading: "lazy", decoding: "async", quality: 82 } as const;
+const compareSizes = "(min-width: 960px) 720px, calc(100vw - 2.5rem)";
+---
+
+<section class="chapter themes" {...chapterAttrs("themes")}>
+  <div class="chapter__intro">
+    <h2>Dark or light, glass or solid.</h2>
+    <p>
+      DBDelve’s own themes alongside Catppuccin, Tokyo Night, Gruvbox and Dracula, each in dark, light and glass. Import
+      themes from Zed or VS Code, or write your own.
+    </p>
+  </div>
+  <div class="compare frame" data-compare data-lit style="--pos:50%">
+    <Image src={queryLight} widths={[640, 960, 1280, 1600]} sizes={compareSizes} alt="Gruvbox Light Glass: a join in the editor and its result grid." {...img} />
+    <Image class="compare__top" src={queryDark} widths={[640, 960, 1280, 1600]} sizes={compareSizes} alt="Gruvbox Dark Glass: a SELECT on the events table." {...img} />
+    <span class="compare__handle" aria-hidden="true"></span>
+    <label class="sr-only" for="compare-range">Reveal dark or light theme</label>
+    <input id="compare-range" type="range" min="0" max="100" value="50" aria-valuetext="50% dark" />
+  </div>
+  <div class="themes__aside">
+    <figure class="themes__picker frame" data-lit>
+      <Image src={themes} widths={[480, 960]} sizes="(min-width: 960px) 360px, 100vw" alt="The theme picker, with themes imported from Zed and VS Code." {...img} />
+      <figcaption>The theme picker, with imported themes listed beside the built-in ones.</figcaption>
+    </figure>
+    <p>
+      Hidden and pinned columns, the layout and the last results survive a restart: DBDelve opens where you left off,
+      without running anything again.
+    </p>
+  </div>
+</section>
+
+<style is:global>
+  /* The torch still lights the picker, but without the frame's glowing ring. */
+  .themes__picker::after {
+    display: none;
+  }
+  .themes {
+    display: grid;
+    grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    gap: 2rem 3rem;
+  }
+  .themes .chapter__intro {
+    grid-column: 1 / -1;
+  }
+  .compare {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    align-self: start;
+  }
+  .compare > img {
+    border-radius: var(--radius-md);
+  }
+  .compare > .compare__top {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+  }
+  .compare__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 2px;
+    translate: -1px 0;
+    background: var(--color-text);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .compare__handle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--color-text);
+    box-shadow: 0 4px 20px rgb(0 0 0 / 0.4);
+    mask: radial-gradient(circle, transparent 5px, #000 6px);
+  }
+  .compare input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: ew-resize;
+    margin: 0;
+    z-index: 3;
+  }
+  .compare:has(input:focus-visible) {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 4px;
+  }
+  .themes__aside > p {
+    color: var(--color-text-2);
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 959px) {
+    .themes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { mount } from "@/lib/lifecycle";
+  import { initCompare } from "@/lib/ui/compare";
+
+  mount((signal) => initCompare(document, signal));
+</script>

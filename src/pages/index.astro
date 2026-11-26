@@ -1,0 +1,67 @@
+---
+import Boat from "@/components/ocean/Boat.astro";
+import OceanStage from "@/components/ocean/OceanStage.astro";
+import DiveComputer from "@/components/expedition/DiveComputer.astro";
+import Topbar from "@/components/layout/Topbar.astro";
+import Benchmarks from "@/components/sections/Benchmarks.astro";
+import Deep from "@/components/sections/Deep.astro";
+import Descent from "@/components/sections/Descent.astro";
+import Engines from "@/components/sections/Engines.astro";
+import Features from "@/components/sections/Features.astro";
+import Install from "@/components/sections/Install.astro";
+import Surface from "@/components/sections/Surface.astro";
+import Themes from "@/components/sections/Themes.astro";
+import Tour from "@/components/sections/Tour.astro";
+import Layout from "@/layouts/Layout.astro";
+import { homeSeo } from "@/lib/seo";
+---
+
+<Layout seo={homeSeo}>
+  <OceanStage />
+  <DiveComputer />
+  <!-- ScrollSmoother moves this content with a transform; fixed layers stay outside. -->
+  <div class="page" data-smooth-wrapper>
+    <div data-smooth-content>
+      <Boat />
+      <Topbar />
+      <main id="main">
+        <Surface />
+        <Descent />
+        <Engines />
+        <Tour />
+        <Benchmarks />
+        <Features />
+        <Themes />
+        <Install />
+        <Deep />
+      </main>
+    </div>
+  </div>
+</Layout>
+
+<style is:global>
+  /* One layer between the ocean canvas (0) and the diver (2), smoothed or not. */
+  .page {
+    position: relative;
+    z-index: 1;
+  }
+  main {
+    position: relative;
+    z-index: 1;
+    padding-inline: var(--gutter);
+  }
+  /* Keep the lane beside the content free for the diver and the dive computer,
+     mirrored on the left so the column stays centred. */
+  @media (min-width: 960px) {
+    main {
+      padding-inline: max(var(--gutter), 9.5rem);
+    }
+  }
+</style>
+
+<script>
+  import { initExpedition } from "@/lib/expedition/controller";
+  import { mount } from "@/lib/lifecycle";
+
+  mount((signal) => initExpedition(signal));
+</script>

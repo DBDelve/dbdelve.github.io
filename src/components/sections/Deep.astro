@@ -1,0 +1,145 @@
+---
+// 9 · The Deep: the diver settles into the logo and lights its data bars;
+// then the final call, community, sponsors and the footer.
+import LogoReveal from "@/components/brand/LogoReveal.astro";
+import SiteFooter from "@/components/layout/SiteFooter.astro";
+import { chapterAttrs } from "@/data/chapters";
+import { LINKS } from "@/data/site";
+import { SPONSOR_TIERS } from "@/data/sponsors";
+---
+
+<section class="chapter deep" {...chapterAttrs("deep")}>
+  <LogoReveal />
+  <div class="deep__copy">
+    <h2>Down here is your data.</h2>
+    <p>
+      Free and open source under GPL-3.0. No telemetry: the only request DBDelve makes on its own is an update check, which
+      you can turn off.
+    </p>
+    <div class="actions actions--center">
+      <a class="btn btn--primary" href={LINKS.release}>Download latest release</a>
+      <a class="btn" href={LINKS.repo}>View on GitHub</a>
+    </div>
+  </div>
+  <div class="deep__grid">
+    <div class="deep__card">
+      <h3>Talk to us</h3>
+      <p>
+        Ideas and discussion on <a href={LINKS.discord}>Discord</a>. Found a bug or missing an engine? <a href={LINKS.issues}
+          >Open an issue</a
+        >; <b>Help → Copy Diagnostics</b> puts the local log on your clipboard.
+      </p>
+    </div>
+    <div class="deep__card" id="sponsors">
+      <h3>Support DBDelve’s development</h3>
+      <p>Sponsors keep DBDelve free and open source.</p>
+      <a class="btn deep__patreon" href={LINKS.patreon}>Sponsor on Patreon</a>
+      {
+        SPONSOR_TIERS.map((tier) => (
+          <div class="sp-tier">
+            <h4 class="sr-only">{tier.title}</h4>
+            <ul class={tier.logo ? "sp-list" : "sp-names"}>
+              {tier.members.map((s) => {
+                const href = tier.linked ? s.link : undefined;
+                const Tag = href ? "a" : tier.logo ? "div" : "span";
+                return (
+                  <li>
+                    <Tag class={tier.logo ? `sp-logo sp-logo--${tier.logo}` : undefined} href={href} rel={href ? "noopener nofollow" : undefined}>
+                      {tier.logo && s.avatar && (
+                        <img src={s.avatar} alt="" width={tier.size} height={tier.size} loading="lazy" decoding="async" referrerpolicy="no-referrer" />
+                      )}
+                      {tier.logo ? <span class="sp-name">{s.name}</span> : s.name}
+                    </Tag>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  <SiteFooter />
+</section>
+
+<style is:global>
+  .deep {
+    text-align: center;
+    padding-bottom: 3rem;
+    /* The logo's halo may bleed past a phone's edge; never let it widen the page. */
+    overflow-x: clip;
+  }
+  .actions--center {
+    justify-content: center;
+  }
+  .deep__copy {
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+  .deep__copy h2 {
+    font-size: var(--step-4);
+  }
+  .deep__copy p {
+    color: var(--color-text-2);
+    font-size: var(--step-1);
+    font-weight: 300;
+    line-height: 1.45;
+  }
+  .deep__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: 52rem;
+    margin: 5rem auto 0;
+    text-align: left;
+  }
+  .deep__card {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    background: rgb(2 16 21 / 0.4);
+  }
+  .deep__card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .deep__card p {
+    color: var(--color-text-2);
+    font-size: 0.95rem;
+  }
+  .deep__patreon {
+    min-height: 40px;
+    font-size: 0.95rem;
+  }
+  .sp-tier {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .sp-list,
+  .sp-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+  }
+  .sp-names {
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+  .sp-logo {
+    display: grid;
+    justify-items: center;
+    gap: 0.35rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.8rem;
+  }
+  .sp-logo img {
+    border-radius: 50%;
+  }
+  @media (max-width: 959px) {
+    .deep__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

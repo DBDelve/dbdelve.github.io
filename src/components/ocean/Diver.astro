@@ -1,0 +1,39 @@
+---
+// The diver from the DBDelve logo, rigged: the logo's own geometry, each leg
+// split at the knee (the knee lies on the logo's straight leg, so at rest the
+// rig draws exactly the logo's diver). lib/expedition/diver.ts animates it.
+import { LEGS } from "@/lib/expedition/diver";
+
+const legs = [
+  { id: "b", L: LEGS.b, far: true },
+  { id: "a", L: LEGS.a, far: false },
+] as const;
+---
+
+<svg class="diver" data-diver aria-hidden="true" focusable="false">
+  <g data-root fill="#04161a" stroke="#04161a" stroke-linecap="round" stroke-linejoin="round">
+    {
+      legs.map(({ id, L, far }) => (
+        <g {...(far ? { "data-far": "", opacity: ".86" } : {})}>
+          <g data-hip={id}>
+            <path d={`M${L.hip.join(" ")} L${L.knee.join(" ")}`} stroke-width="34" fill="none" />
+            <g data-knee={id}>
+              <path d={`M${L.knee.join(" ")} L${L.ankle.join(" ")}`} stroke-width="34" fill="none" />
+              <g data-ankle={id}>
+                <path d={L.fin} stroke-width="10" />
+              </g>
+            </g>
+          </g>
+        </g>
+      ))
+    }
+    <rect x="-178" y="-82" width="150" height="46" rx="23" stroke="none"></rect>
+    <rect x="-215" y="-34" width="200" height="76" rx="38" stroke="none"></rect>
+    <circle cx="18" cy="-8" r="40" stroke="none"></circle>
+    <path data-visor d="M38 -30 A30 30 0 0 1 54 -6" fill="none" stroke="#5fe0d0" stroke-opacity=".55" stroke-width="7"></path>
+    <g data-arm>
+      <path d="M-40 6 L73 47" stroke-width="28" fill="none"></path>
+      <rect x="65" y="41" width="40" height="26" rx="7" stroke="none"></rect>
+    </g>
+  </g>
+</svg>

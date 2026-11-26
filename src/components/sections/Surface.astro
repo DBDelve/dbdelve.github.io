@@ -1,0 +1,168 @@
+---
+// 1 · The Surface: the pitch, the download, and the product above the fold.
+import { Image } from "astro:assets";
+
+import heroShot from "@/assets/shots/query-dark.webp";
+import { chapterAttrs } from "@/data/chapters";
+import { NATIVE_ENGINES } from "@/data/engines";
+import { LINKS } from "@/data/site";
+---
+
+<section class="chapter hero" {...chapterAttrs("surface")}>
+  <div class="hero__copy">
+    <h1>Delve into any&nbsp;database.</h1>
+    <p class="lede">
+      DBDelve is a fast, native database client for macOS, Linux and Windows. Written in Rust with GPUI, no Electron and
+      no JVM: instant startup, little memory, and smooth scrolling through large tables.
+    </p>
+    <div class="actions">
+      <a class="btn btn--primary" href={LINKS.release}>Download latest release</a>
+      <a class="btn" href={LINKS.repo}>View on GitHub</a>
+    </div>
+    <p class="fine">Free and open source. No telemetry. Nothing behind a paywall.</p>
+    <ul class="hero__caps" aria-label="What it does">
+      <li><b>{NATIVE_ENGINES.length}</b> engines natively, more through ODBC</li>
+      <li>Query plans with misestimates flagged</li>
+      <li>Edits shown as SQL before they run</li>
+      <li>CSV, Excel, Parquet and JSON as queries</li>
+    </ul>
+  </div>
+  <figure class="hero__shot frame" data-lit>
+    <Image
+      src={heroShot}
+      widths={[640, 960, 1280, 1600]}
+      sizes="(min-width: 1100px) 640px, (min-width: 960px) calc(100vw - 14rem), calc(100vw - 2.5rem)"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      quality={82}
+      alt="DBDelve in Gruvbox Dark Glass: a SELECT on the events table in the editor, the schema tree on the left and 1,000 result rows in the grid below."
+    />
+    <figcaption>Gruvbox Dark Glass. The status bar says the result stopped at the row limit: the statement ran as typed.</figcaption>
+  </figure>
+</section>
+
+<style is:global>
+  .hero {
+    padding-top: calc(var(--waterline) + clamp(3rem, 9vh, 6rem));
+    min-height: 100vh;
+  }
+  .hero h1 {
+    font-size: var(--step-5);
+    font-weight: 300;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+    max-width: 11ch;
+    margin-bottom: 0.35em;
+  }
+  .lede {
+    font-size: var(--step-1);
+    font-weight: 300;
+    line-height: 1.45;
+    max-width: 40ch;
+    color: #d3ecea;
+  }
+  .hero__copy {
+    max-width: 46rem;
+  }
+  .hero__shot {
+    margin-top: clamp(2.5rem, 6vh, 4rem);
+  }
+  .hero__shot > img {
+    box-shadow:
+      0 30px 80px rgb(0 0 0 / 0.45),
+      0 0 0 1px rgb(191 230 255 / 0.08),
+      0 -20px 90px rgb(150 225 215 / 0.16);
+  }
+  .hero__caps {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 1.1rem 0 0;
+    border-top: 1px solid var(--color-line);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem 1.5rem;
+    font-size: var(--step--1);
+    color: #d3ecea;
+    max-width: 34rem;
+  }
+  .hero__caps li {
+    display: flex;
+    gap: 0.55rem;
+    align-items: baseline;
+    line-height: 1.35;
+  }
+  .hero__caps li::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-mint);
+    translate: 0 -1px;
+    box-shadow: 0 0 8px var(--color-mint);
+  }
+  .hero__caps b {
+    color: var(--color-mint);
+    margin-right: -0.3rem;
+  }
+  /* Below the two-column layout the capabilities are left to their own
+     chapters, so the product starts inside the first screen. */
+  @media (max-width: 1099px) {
+    .hero__caps {
+      display: none;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero {
+      padding-top: calc(var(--waterline) + 2.5rem);
+    }
+    .lede {
+      font-size: 1.08rem;
+    }
+    .hero .actions {
+      margin-top: 1.5rem;
+    }
+  }
+  /* Mid widths: a smaller headline, so the product starts inside the first screen. */
+  @media (min-width: 641px) and (max-width: 1099px) {
+    .hero {
+      padding-top: calc(var(--waterline) + clamp(2rem, 6vh, 4rem));
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 7.4vw, 5.2rem);
+    }
+  }
+  /* Wide screens: the product sits beside the pitch, and the whole hero fits the
+     first screen. Type also scales with the screen's height, so short laptop
+     screens keep the pitch, the actions and the capabilities above the fold. */
+  @media (min-width: 1100px) {
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: center;
+      padding-top: calc(var(--waterline) + clamp(0.75rem, 3vh, 3.5rem));
+      max-width: 1180px;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, min(5.2vw, 8vh), 5.4rem);
+    }
+    .hero .lede {
+      font-size: clamp(1rem, 2.2vh, 1.18rem);
+    }
+    .hero .actions {
+      margin-top: clamp(1.25rem, 3.5vh, 2rem);
+    }
+    .hero__caps {
+      margin-top: clamp(0.75rem, 2.5vh, 1.5rem);
+    }
+    .hero__shot {
+      margin-top: 0;
+      margin-right: calc(-1 * clamp(0rem, 3vw, 3rem));
+    }
+    .hero__shot figcaption {
+      max-width: 44ch;
+    }
+  }
+</style>

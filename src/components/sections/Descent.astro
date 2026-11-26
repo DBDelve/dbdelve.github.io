@@ -1,0 +1,110 @@
+---
+// 2 · The Descent: what "delve" means, and why the client exists.
+import { chapterAttrs } from "@/data/chapters";
+---
+
+<section class="chapter descent" {...chapterAttrs("descent")}>
+  <div class="descent__entry" data-smooth-pin>
+    <p class="entry__word" lang="en">delve</p>
+    <p class="entry__pron">/dɛlv/ &middot; verb</p>
+    <ol class="entry__senses">
+      <li>to dig.</li>
+      <li>to search deeply; to go below what is on the surface.</li>
+    </ol>
+    <p class="entry__etym">From Old English <i lang="ang">delfan</i>, “to dig”.</p>
+  </div>
+  <div class="descent__prose">
+    <h2>A client for going below the surface.</h2>
+    <p>
+      Most time in a database client is spent underneath: scrolling a table far past the first page, reading a plan,
+      checking a row before you change it. That work should feel light, however deep it goes.
+    </p>
+    <blockquote>
+      <p>
+        “I wanted something which is performant, modern and consumes little ram. The existing DB clients are either
+        filled with bloat (Electron and JVM) or paid. This is an alternative to them. No feature is ever going behind a
+        paywall.”
+      </p>
+      <footer>Shayan Abbas, from the README</footer>
+    </blockquote>
+    <p>
+      So DBDelve draws its own interface on the GPU, keeps a statement exactly as you typed it, and asks before anything
+      destructive runs.
+    </p>
+  </div>
+</section>
+
+<style is:global>
+  .descent {
+    display: grid;
+    gap: clamp(2rem, 6vw, 6rem);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+    min-height: 110vh;
+  }
+  .descent__entry {
+    position: sticky;
+    top: 22vh;
+  }
+  .entry__word {
+    font-size: clamp(4.5rem, 13vw, 10rem);
+    font-weight: 300;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    margin: 0 0 0.25em;
+    color: var(--color-foam);
+  }
+  .entry__pron {
+    font-family: var(--font-mono);
+    color: var(--color-text-2);
+    margin-bottom: 1.5rem;
+  }
+  .entry__senses {
+    list-style: decimal;
+    padding-left: 1.4em;
+    font-size: var(--step-1);
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 1em;
+  }
+  .entry__senses li {
+    margin-bottom: 0.4em;
+  }
+  .entry__etym {
+    color: var(--color-text-2);
+  }
+  .descent__prose {
+    max-width: 36rem;
+    padding-top: 1rem;
+  }
+  .descent__prose h2 {
+    font-size: var(--step-3);
+    font-weight: 400;
+  }
+  .descent__prose > p {
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+  .descent blockquote {
+    margin: 2.5rem 0;
+    padding: 0 0 0 1.5rem;
+    border-left: 2px solid var(--color-mint);
+    font-size: var(--step-1);
+    font-weight: 300;
+    line-height: 1.5;
+    font-style: italic;
+  }
+  .descent blockquote footer {
+    font-size: var(--step--1);
+    font-style: normal;
+    color: var(--color-text-2);
+  }
+  @media (max-width: 959px) {
+    .descent {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .descent__entry {
+      position: static;
+    }
+  }
+</style>

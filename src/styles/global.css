@@ -1,0 +1,293 @@
+@import "tailwindcss";
+@import "@fontsource-variable/ibm-plex-sans/wght.css";
+@import "@fontsource-variable/ibm-plex-sans/wght-italic.css";
+@import "@fontsource-variable/lilex/wght.css";
+
+/* Design tokens. The palette is lifted from the DBDelve logo (public/assets/dbdelve.svg). */
+@theme {
+  /* water column, surface to abyss */
+  --color-air: #d6f0eb;
+  --color-air-2: #a7ddd6;
+  --color-surface: #127a7a; /* logo "water" gradient top */
+  --color-shelf: #0b5257;
+  --color-twilight: #06303a;
+  --color-midnight: #03161d;
+  --color-abyss: #021015; /* logo "water" gradient bottom */
+
+  --color-mint: #5fe0d0; /* logo data bars */
+  --color-mint-hover: #8cf0e4;
+  --color-foam: #bfe6ff; /* logo bubbles */
+  --color-beam: #d8f1ff; /* logo flashlight */
+  --color-kelp: #0d4a4a;
+  --color-ink: #04161a; /* logo diver */
+
+  --color-text: #eaf7f5;
+  --color-text-2: #a9cbc8;
+  --color-line: rgb(191 230 255 / 0.16);
+  --color-glass: rgb(2 16 21 / 0.42);
+
+  --font-sans: "IBM Plex Sans Variable", "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "Lilex Variable", "Lilex", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root {
+  /* type scale: perfect fourth, 1rem = 17px body */
+  --step--1: 0.84rem;
+  --step-0: 1rem;
+  --step-1: 1.333rem;
+  --step-2: 1.777rem;
+  --step-3: 2.369rem;
+  --step-4: clamp(2.4rem, 5.6vw, 4.21rem);
+  --step-5: clamp(3rem, 8.4vw, 7.2rem);
+
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --measure: 62ch;
+  /* Air above the water on the first screen; the floor keeps the boat clear of the
+     top bar on short screens. Matches waterlineY() in lib/expedition/controller.ts. */
+  --waterline: max(15vh, 152px);
+  /* Lane beside the content where the diver swims (matches the routes' R92). */
+  --lane: 92px;
+}
+
+@layer base {
+  html {
+    background: var(--color-abyss);
+    color: var(--color-text);
+    font: 400 17px/1.6 var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    scroll-padding-top: 2rem;
+  }
+  body {
+    /* The water column. Without JS this alone carries the descent. */
+    background: linear-gradient(
+      to bottom,
+      var(--color-surface) 0%,
+      var(--color-shelf) 11%,
+      var(--color-twilight) 28%,
+      var(--color-midnight) 52%,
+      var(--color-abyss) 78%
+    );
+    overflow-x: clip;
+  }
+  a {
+    color: var(--color-mint);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  a:hover {
+    color: var(--color-foam);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  code,
+  pre,
+  kbd {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+  h1,
+  h2,
+  h3 {
+    line-height: 1.12;
+    margin: 0 0 0.5em;
+    font-weight: 500;
+    text-wrap: balance;
+  }
+  h2 {
+    font-size: var(--step-4);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+  h3 {
+    font-size: var(--step-1);
+  }
+  p {
+    margin: 0 0 1em;
+    text-wrap: pretty;
+  }
+  b,
+  strong {
+    font-weight: 600;
+  }
+}
+
+@layer components {
+  .fine {
+    font-size: var(--step--1);
+    color: var(--color-text-2);
+  }
+
+  /* ---------- chapters ---------- */
+  .chapter {
+    position: relative;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-block: clamp(6rem, 16vh, 11rem);
+  }
+  .chapter__intro {
+    max-width: var(--measure);
+    margin-bottom: clamp(2rem, 5vh, 3.5rem);
+  }
+  .chapter__intro p {
+    color: var(--color-text-2);
+    font-size: var(--step-1);
+    line-height: 1.45;
+    font-weight: 300;
+  }
+
+  /* ---------- framed screenshots ---------- */
+  .frame {
+    position: relative;
+    margin: 0;
+    border-radius: var(--radius-md);
+  }
+  .frame > img,
+  .frame > picture > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 30px 80px rgb(0 0 0 / 0.45);
+  }
+  figcaption {
+    font-size: var(--step--1);
+    color: var(--color-text-2);
+    margin-top: 0.75rem;
+  }
+
+  /* Flashlight response. lit.ts sets --lit (0..1); --murk rises with depth.
+     Only opacity changes per frame, so the screenshots never repaint. */
+  [data-lit] {
+    --lit: 0;
+  }
+  .frame::before,
+  .cell[data-lit]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+    background: rgb(1 8 11);
+    opacity: calc(var(--murk, 0) * 0.3 * (1 - var(--lit)));
+  }
+  .frame::after,
+  .cell[data-lit]::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow:
+      0 0 0 1px rgb(95 224 208 / 0.55),
+      0 0 60px rgb(95 224 208 / 0.22);
+    opacity: calc(var(--lit) * var(--murk, 0) * 1.6);
+  }
+  .frame > figcaption {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ---------- buttons ---------- */
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 2rem 0 1rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 1.4rem;
+    border-radius: 999px;
+    border: 1px solid rgb(234 247 245 / 0.45);
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+    transition:
+      background-color 0.2s,
+      border-color 0.2s;
+  }
+  .btn:hover {
+    background: rgb(234 247 245 / 0.1);
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+  .btn--primary {
+    background: var(--color-mint);
+    border-color: var(--color-mint);
+    color: var(--color-ink);
+  }
+  .btn--primary:hover {
+    background: var(--color-mint-hover);
+    border-color: var(--color-mint-hover);
+    color: var(--color-ink);
+  }
+
+  /* ---------- tabs (tour + install) ---------- */
+  [role="tablist"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    border-radius: 999px;
+    background: var(--color-glass);
+    border: 1px solid var(--color-line);
+    width: fit-content;
+    margin-bottom: 1.5rem;
+  }
+  [role="tab"] {
+    font: inherit;
+    font-weight: 500;
+    color: var(--color-text-2);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    min-height: 40px;
+    padding: 0 1.1rem;
+    border-radius: 999px;
+  }
+  [role="tab"][aria-selected="true"] {
+    background: var(--color-text);
+    color: var(--color-ink);
+  }
+  [role="tab"]:hover:not([aria-selected="true"]) {
+    color: var(--color-text);
+  }
+}
+
+@media (max-width: 959px) {
+  :root {
+    --lane: 7vw;
+  }
+}
+@media (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

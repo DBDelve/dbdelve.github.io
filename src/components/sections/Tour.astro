@@ -1,0 +1,145 @@
+---
+// 4 · In Action: the interactive product tour. Real screenshots; each note
+// has a spot on the screen, and the diver's flashlight turns toward it.
+import { Image } from "astro:assets";
+
+import { chapterAttrs } from "@/data/chapters";
+import { TOUR } from "@/data/tour";
+---
+
+<section class="chapter tour" {...chapterAttrs("tour")}>
+  <div class="chapter__intro">
+    <h2>In action</h2>
+    <p>Real screenshots of DBDelve. Pick a view, then a note, and the diver’s light finds it on the screen.</p>
+  </div>
+  <div class="tour__tabs" data-tabs>
+    <div role="tablist" aria-label="Product views">
+      {
+        TOUR.map((v, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`t-${v.id}`}
+            aria-controls={`p-${v.id}`}
+            aria-selected={i === 0 ? "true" : "false"}
+            tabindex={i === 0 ? undefined : -1}
+          >
+            {v.label}
+          </button>
+        ))
+      }
+    </div>
+    {
+      TOUR.map((v, i) => (
+        <div role="tabpanel" id={`p-${v.id}`} aria-labelledby={`t-${v.id}`} class="tour__panel" data-spots hidden={i !== 0}>
+          <figure class="tour__figure frame" data-lit>
+            <Image
+              src={v.shot}
+              widths={[640, 960, 1280, 1600]}
+              sizes="(min-width: 960px) 760px, calc(100vw - 2.5rem)"
+              loading="lazy"
+              decoding="async"
+              quality={82}
+              alt={v.alt}
+            />
+            {v.notes.map((n) => (
+              <span class="spot" style={`--x:${n.x}%;--y:${n.y}%`} data-spot={n.id} aria-hidden="true" />
+            ))}
+          </figure>
+          <ul class="notes">
+            {v.notes.map((n, k) => (
+              <li>
+                <button type="button" data-note={n.id} aria-pressed={k === 0 ? "true" : "false"}>
+                  <b>{n.title}</b> <Fragment set:html={n.body} />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style is:global>
+  .tour__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(16rem, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+  .tour__panel[hidden] {
+    display: none;
+  }
+  .spot {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    border: 2px solid var(--color-mint);
+    background: rgb(95 224 208 / 0.18);
+    opacity: 0.45;
+    transition:
+      opacity 0.3s,
+      scale 0.3s var(--ease-out);
+  }
+  .spot.is-active {
+    opacity: 1;
+    scale: 1.25;
+    box-shadow: 0 0 0 6px rgb(95 224 208 / 0.18);
+  }
+  .notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .notes button {
+    font: inherit;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    color: var(--color-text-2);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1rem;
+    line-height: 1.5;
+  }
+  .notes button b {
+    display: block;
+    color: var(--color-text);
+    margin-bottom: 0.15rem;
+  }
+  .notes button:hover {
+    border-color: var(--color-line);
+  }
+  .notes button[aria-pressed="true"] {
+    background: var(--color-glass);
+    border-color: rgb(95 224 208 / 0.5);
+    color: var(--color-text);
+  }
+  @media (max-width: 959px) {
+    .tour__panel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { mount } from "@/lib/lifecycle";
+  import { initTabs } from "@/lib/ui/tabs";
+  import { initTour } from "@/lib/ui/tour";
+
+  mount((signal) => {
+    const tour = document.getElementById("tour");
+    if (!tour) return;
+    initTabs(tour, signal);
+    initTour(tour, signal);
+  });
+</script>
