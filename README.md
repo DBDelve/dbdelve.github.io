@@ -42,8 +42,8 @@ Neither is configured here. `public/.nojekyll` keeps Pages from dropping `_astro
 `src/lib/expedition/controller.ts` runs one clock (`gsap.ticker`) over one frame
 state. Its concepts stay separate:
 
-- **Scroll** is the visitor's real position. Native scrolling is never hijacked.
-- **Camera** is scroll eased with a 90 ms time constant, never more than 0.22 viewports behind (`camera.ts`).
+- **Scroll** is what the visitor sees. On pointer devices GSAP's ScrollSmoother eases the page content (`smooth.ts`); the scrollbar, keyboard and touch scrolling stay native.
+- **Camera** follows the smoothed content exactly. Where nothing smooths (touch), it eases the scroll with a 180 ms time constant, never more than 0.22 viewports behind (`camera.ts`).
 - **Depth and chapter** are narrative metres derived from the camera.
 - **Route** is the diver's trajectory, a pure function of the camera: monotone cubic through authored keyframes, so it never overshoots and reverses exactly (`route.ts`).
 - **Orientation** is the authored heading, re-pitched by travel direction. Direction changes use hysteresis, a commit distance and a hold time (`travel.ts`).
@@ -52,13 +52,15 @@ state. Its concepts stay separate:
 - **Finale** is a pure function of the camera. The diver blends into the logo's diver pose, which is mapped through the logo SVG's own transform.
 
 A single page-spanning ScrollTrigger supplies scroll updates and layout refreshes.
-`gsap.matchMedia` switches reduced motion and the small-screen routes. With reduced
-motion the clock stops, the camera equals the scroll and each frame is drawn on demand.
+`gsap.matchMedia` switches reduced motion, smoothing and the small-screen routes. With
+reduced motion there is no smoothing, the clock stops, the camera equals the scroll and
+each frame is drawn on demand.
 
 MotionPathPlugin was evaluated and not used. The route's heading is authored rather
 than taken from the path tangent (`autoRotate`), so a reversed scroll can never flip
-the diver. Lenis was not added either: the camera already smooths, and Lenis would
-smooth a second time while taking over native, keyboard and anchor scrolling.
+the diver. Lenis was not added: ScrollSmoother ships with the GSAP already installed.
+While it runs, `smooth.ts` routes in-page links through it, pins what CSS makes sticky
+and hands find-in-page scrolls back to the page.
 
 ## Credits and licenses
 

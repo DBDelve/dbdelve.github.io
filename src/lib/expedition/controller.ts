@@ -1,7 +1,8 @@
 // The expedition controller: one clock, one frame state, every moving part a
 // function of it. Concepts stay separate:
 //
-//   scroll        the visitor's real position (native scrolling, never hijacked)
+//   scroll        what the visitor sees: native, or eased by ScrollSmoother on
+//                 pointer devices (smooth.ts); the scrollbar stays native
 //   camera        scroll eased by a short, bounded lag (camera.ts)
 //   depth         narrative metres and the current chapter, from the camera
 //   route         the diver's world-space trajectory, a pure function of the camera (route.ts)
@@ -27,11 +28,13 @@ import { createDiver, type FinaleTarget, LOGO_POSE, PIVOT } from "./diver";
 import { createLit } from "./lit";
 import { createOcean } from "./ocean";
 import { buildRoute, parseRoute, type RoutePose } from "./route";
+import { createSmooth } from "./smooth";
 import type { ExpeditionState } from "./state";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const WATERLINE = 0.15; // fraction of the first viewport above water; matches --waterline
+// Air above the water on the first screen, px; matches --waterline in global.css.
+const waterlineY = (vh: number) => Math.max(vh * 0.15, 152);
 
 const AIMS: Record<string, string> = {
   tour: ".tour__panel:not([hidden]) .spot.is-active",
@@ -56,6 +59,7 @@ export function initExpedition(signal: AbortSignal): () => void {
   );
   const computer = createDiveComputer(need("[data-dive-computer]"), need("#expedition"), signal);
   const lit = createLit();
+  const smooth = createSmooth(signal);
   const sonarEl = document.querySelector<HTMLElement>("[data-sonar]");
   const sonar = sonarEl ? createSonar(sonarEl, signal) : null;
   const lineAnchor = document.querySelector<HTMLElement>("[data-line-anchor]");
@@ -91,17 +95,19 @@ export function initExpedition(signal: AbortSignal): () => void {
   let logoPivot: { x: number; y: number; scale: number } | null = null;
 
   function measure() {
+    // Rects are visual; with smoothing on, the content trails the scrollbar.
+    const y0 = smooth.y();
     s.vw = innerWidth;
     s.vh = innerHeight;
     s.maxScroll = Math.max(1, root.scrollHeight - s.vh);
-    s.waterlineDoc = s.vh * WATERLINE;
+    s.waterlineDoc = waterlineY(s.vh);
     const a = lineAnchor?.getBoundingClientRect();
-    s.line = a && a.width + a.height > 0 ? { x: a.left + a.width / 2, y: a.top + scrollY } : null;
+    s.line = a && a.width + a.height > 0 ? { x: a.left + a.width / 2, y: a.top + y0 } : null;
     const lineX = s.line ? s.line.x / s.vw : 0.7;
     const sections = [...document.querySelectorAll<HTMLElement>("[data-chapter]")];
     s.contentRight = Math.max(0, ...sections.map((el) => el.getBoundingClientRect().right));
     s.chapters = sections.map((el, i) => {
-      const top = el.getBoundingClientRect().top + scrollY;
+      const top = el.getBoundingClientRect().top + y0;
       return {
         el,
         id: el.id,
@@ -131,7 +137,7 @@ export function initExpedition(signal: AbortSignal): () => void {
       const lx = LOGO_POSE.x + Math.cos(LOGO_POSE.angle) * LOGO_POSE.scale * PIVOT;
       const ly = LOGO_POSE.y + Math.sin(LOGO_POSE.angle) * LOGO_POSE.scale * PIVOT;
       const p = new DOMPoint(lx, ly).matrixTransform(ctm);
-      logoPivot = { x: p.x, y: p.y + scrollY, scale: LOGO_POSE.scale * Math.hypot(ctm.a, ctm.b) };
+      logoPivot = { x: p.x, y: p.y + y0, scale: LOGO_POSE.scale * Math.hypot(ctm.a, ctm.b) };
     } else logoPivot = null;
     ocean.resize(s);
     diver.resize(s);
@@ -164,8 +170,10 @@ export function initExpedition(signal: AbortSignal): () => void {
   let lastFinale = -1;
   function render() {
     const prev = s.cam;
-    s.scrollY = scrollY;
-    s.cam = advanceCamera(s.cam, s.scrollY, s.dt, s.vh, s.reduced);
+    // The camera follows what is on screen. When the smoother already eases the
+    // content, a second lag would leave the diver behind the text.
+    s.scrollY = smooth.y();
+    s.cam = advanceCamera(s.cam, s.scrollY, s.dt, s.vh, s.reduced || smooth.active());
     s.velocity = s.dt > 0 ? (s.cam - prev) / s.dt : 0;
     Object.assign(s, readDepth(s.chapters, s.cam, s.maxScroll));
     s.murk = Math.min(1, Math.pow(s.depthM / 1600, 0.8));
@@ -238,20 +246,35 @@ export function initExpedition(signal: AbortSignal): () => void {
   ro.observe(document.body);
 
   const mm = gsap.matchMedia();
-  mm.add({ reduce: "(prefers-reduced-motion: reduce)", small: "(max-width: 959px)" }, (ctx) => {
+  // matchMedia runs the callback only while some condition matches: `motion`
+  // makes one always match, so every change re-runs it with fresh conditions.
+  const media = {
+    reduce: "(prefers-reduced-motion: reduce)",
+    motion: "(prefers-reduced-motion: no-preference)",
+    small: "(max-width: 959px)",
+  };
+  mm.add(media, (ctx) => {
     s.reduced = !!ctx.conditions?.reduce;
     s.small = !!ctx.conditions?.small;
+    // Touch-only devices keep native momentum scrolling.
+    const stopSmooth = s.reduced || ScrollTrigger.isTouch === 1 ? null : smooth.start();
     measure();
     if (s.reduced) stopClock();
     else startClock();
     renderOnce();
+    return () => stopSmooth?.();
   });
 
   document.addEventListener("dbdelve:aim", renderOnce, { signal });
 
   // Read-only view for validation scripts.
   const w = window as Window & { dbdelveExpedition?: unknown };
-  w.dbdelveExpedition = { state: s, route: (c: number) => route(c), diver: diver.snapshot };
+  w.dbdelveExpedition = {
+    state: s,
+    route: (c: number) => route(c),
+    diver: diver.snapshot,
+    smoothing: () => smooth.active(),
+  };
 
   measure();
   s.dt = 0;

@@ -18,32 +18,43 @@ import { homeSeo } from "@/lib/seo";
 
 <Layout seo={homeSeo}>
   <OceanStage />
-  <Boat />
-  <Topbar />
   <DiveComputer />
-  <main id="main">
-    <Surface />
-    <Descent />
-    <Engines />
-    <Tour />
-    <Benchmarks />
-    <Features />
-    <Themes />
-    <Install />
-    <Deep />
-  </main>
+  <!-- ScrollSmoother moves this content with a transform; fixed layers stay outside. -->
+  <div class="page" data-smooth-wrapper>
+    <div data-smooth-content>
+      <Boat />
+      <Topbar />
+      <main id="main">
+        <Surface />
+        <Descent />
+        <Engines />
+        <Tour />
+        <Benchmarks />
+        <Features />
+        <Themes />
+        <Install />
+        <Deep />
+      </main>
+    </div>
+  </div>
 </Layout>
 
 <style is:global>
+  /* One layer between the ocean canvas (0) and the diver (2), smoothed or not. */
+  .page {
+    position: relative;
+    z-index: 1;
+  }
   main {
     position: relative;
     z-index: 1;
     padding-inline: var(--gutter);
   }
-  /* Keep the lane beside the content free for the diver and the dive computer. */
+  /* Keep the lane beside the content free for the diver and the dive computer,
+     mirrored on the left so the column stays centred. */
   @media (min-width: 960px) {
     main {
-      padding-right: max(var(--gutter), 9.5rem);
+      padding-inline: max(var(--gutter), 9.5rem);
     }
   }
 </style>

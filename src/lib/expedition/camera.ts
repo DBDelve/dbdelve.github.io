@@ -1,7 +1,7 @@
 // The camera: document scroll eased by a short, bounded lag. It is the only
 // thing allowed to trail the scrollbar, and it never trails by more than
 // MAX_LAG viewports. Pure, so tests can drive it.
-export const LAG = 0.09; // time constant, s: about ScrollTrigger's scrub: 0.3
+export const LAG = 0.18; // time constant, s: about ScrollTrigger's scrub: 0.6
 export const MAX_LAG = 0.22; // viewports
 
 export function advanceCamera(
