@@ -47,22 +47,6 @@ import { LINKS } from "@/data/site";
     padding-top: calc(var(--waterline) + clamp(3rem, 9vh, 6rem));
     min-height: 100vh;
   }
-  /* Air above the waterline. The ocean canvas redraws it with a moving
-     surface once JS runs; this keeps the picture whole without it. */
-  .hero::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: 50%;
-    width: 100vw;
-    margin-left: -50vw;
-    top: 0;
-    height: var(--waterline);
-    background: linear-gradient(var(--color-air), var(--color-air-2));
-  }
-  .js .hero::before {
-    visibility: hidden;
-  }
   .hero h1 {
     font-size: var(--step-5);
     font-weight: 300;

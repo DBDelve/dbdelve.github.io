@@ -256,9 +256,11 @@ export function initExpedition(signal: AbortSignal): () => void {
   measure();
   s.dt = 0;
   render();
+  root.classList.add("ocean-ready");
   startClock();
 
   return () => {
+    root.classList.remove("ocean-ready");
     stopClock();
     cancelAnimationFrame(pending);
     cancelAnimationFrame(refreshQueued);

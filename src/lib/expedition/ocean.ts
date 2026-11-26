@@ -50,6 +50,12 @@ function causticTile(size: number): HTMLCanvasElement {
   return c;
 }
 
+/** The surface's offset from the waterline at x px and time t s. OceanStage draws t = 0 as markup. */
+export const surfaceWave = (x: number, t: number) =>
+  Math.sin(x * 0.011 + t * 1.1) * 3.5 +
+  Math.sin(x * 0.029 - t * 0.8) * 1.8 +
+  Math.sin(x * 0.0047 + t * 0.4) * 2.2;
+
 interface Particle {
   x: number;
   y: number;
@@ -274,11 +280,7 @@ export function createOcean(canvas: HTMLCanvasElement) {
 
     // ---- air and the moving surface ----
     if (wl > -16) {
-      const wave = (x: number) =>
-        wl +
-        Math.sin(x * 0.011 + t * 1.1) * 3.5 +
-        Math.sin(x * 0.029 - t * 0.8) * 1.8 +
-        Math.sin(x * 0.0047 + t * 0.4) * 2.2;
+      const wave = (x: number) => wl + surfaceWave(x, t);
       const air = ctx.createLinearGradient(0, 0, 0, wl);
       air.addColorStop(0, "#dff4ef");
       air.addColorStop(1, "#a7ddd6");
